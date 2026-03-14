@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Simulador Admisión Secundaria General 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --azul:#1a3a6b;
+  --azul2:#2456a4;
+  --azul3:#3b76d1;
+  --verde:#27ae60;
+  --rojo:#e74c3c;
+  --amarillo:#f39c12;
+  --gris:#f4f6fb;
+  --texto:#1a2340;
+  --blanco:#fff;
+  --sombra:0 4px 24px rgba(36,86,164,0.13);
+}
+html,body{
+  height:100%;
+  overflow:hidden;
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:linear-gradient(135deg,#1a3a6b 0%,#2456a4 50%,#3b76d1 100%);
+}
+
+/* ── PANTALLA BIENVENIDA ─────────────────────────────────────────── */
+#screenWelcome{
+  display:flex;
+  height:100vh;
+  align-items:center;
+  justify-content:center;
+}
+.welcome-box{
+  background:var(--blanco);
+  border-radius:20px;
+  box-shadow:var(--sombra);
+  padding:48px 52px;
+  max-width:520px;
+  width:92%;
+  text-align:center;
+}
+.logo-header{
+  width:72px;height:72px;
+  background:linear-gradient(135deg,var(--azul),var(--azul3));
+  border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;
+  font-size:2.2em;
+}
+.welcome-box h1{
+  font-size:1.55em;color:var(--azul);font-weight:800;
+  line-height:1.25;margin-bottom:6px;
+}
+.welcome-box .credito{
+  font-size:.85em;color:#7a8aab;margin-bottom:22px;letter-spacing:.02em;
+}
+.welcome-box p{
+  font-size:.95em;color:#4a5568;margin-bottom:26px;line-height:1.6;
+}
+.info-chips{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;
+}
+.chip{
+  background:var(--gris);border-radius:30px;padding:7px 18px;
+  font-size:.82em;color:var(--azul);font-weight:600;border:1.5px solid #cdd8ef;
+}
+.input-group{
+  margin-bottom:24px;text-align:left;
+}
+.input-group label{
+  display:block;font-weight:700;color:var(--azul);margin-bottom:8px;font-size:.95em;
+}
+.input-group input{
+  width:100%;padding:13px 16px;border:2px solid #c8d6ef;border-radius:10px;
+  font-size:1em;color:var(--texto);outline:none;transition:border .2s;
+  font-family:inherit;
+}
+.input-group input:focus{border-color:var(--azul3);}
+.btn-start{
+  width:100%;padding:15px;background:linear-gradient(90deg,var(--azul),var(--azul3));
+  color:var(--blanco);border:none;border-radius:12px;font-size:1.1em;
+  font-weight:800;cursor:pointer;letter-spacing:.03em;
+  transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(36,86,164,.28);
+}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(36,86,164,.38);}
+.btn-start:active{transform:translateY(0);}
+
+/* ── PANTALLA EXAMEN ──────────────────────────────────────────────── */
+#screenExam{
+  display:none;
+  height:100vh;
+  flex-direction:column;
+}
+
+/* HEADER */
+.exam-header{
+  background:linear-gradient(90deg,var(--azul) 0%,var(--azul2) 100%);
+  color:var(--blanco);
+  padding:10px 20px 8px;
+  flex-shrink:0;
+}
+.header-top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.header-title{
+  flex:1;min-width:0;
+}
+.header-title h1{
+  font-size:.97em;font-weight:800;letter-spacing:.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.header-title .credito-h{
+  font-size:.72em;opacity:.82;margin-top:1px;
+}
+.timer-box{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.13);
+  border-radius:10px;padding:7px 14px;flex-shrink:0;
+  border:1.5px solid rgba(255,255,255,.22);
+}
+.timer-icon{font-size:1.2em;}
+#timerDisplay{
+  font-size:1.18em;font-weight:800;font-variant-numeric:tabular-nums;
+  letter-spacing:.04em;min-width:62px;text-align:center;
+}
+.timer-box.warning{background:rgba(231,76,60,.35);border-color:rgba(231,76,60,.5);}
+.timer-box.danger{background:rgba(231,76,60,.6);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+/* PROGRESS BAR */
+.progress-wrap{
+  margin-top:8px;display:flex;align-items:center;gap:10px;
+}
+.progress-track{
+  flex:1;height:6px;background:rgba(255,255,255,.22);border-radius:3px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,#27ae60,#2ecc71);
+  border-radius:3px;transition:width .4s ease;width:0%;
+}
+.progress-label{font-size:.78em;opacity:.88;white-space:nowrap;}
+
+/* BODY */
+.exam-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:var(--gris);
+}
+.question-area{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 20px 0;
+  overflow:hidden;
+}
+.q-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;flex-shrink:0;
+}
+.q-num-badge{
+  background:var(--azul);color:var(--blanco);
+  border-radius:20px;padding:5px 16px;
+  font-size:.82em;font-weight:700;
+}
+.q-tema{
+  font-size:.77em;color:#7a8aab;font-weight:600;
+  background:#eaf0fb;border-radius:20px;padding:4px 12px;
+  border:1px solid #c8d6ef;
+}
+.q-text{
+  font-size:1em;color:var(--texto);line-height:1.55;
+  font-weight:600;margin-bottom:12px;flex-shrink:0;
+  max-height:5.5em;overflow-y:auto;
+}
+.q-text::-webkit-scrollbar{width:4px;}
+.q-text::-webkit-scrollbar-thumb{background:#c8d6ef;border-radius:2px;}
+
+/* OPTIONS */
+.options-list{
+  flex:1;display:flex;flex-direction:column;gap:8px;
+  overflow:hidden;
+}
+.opt{
+  background:var(--blanco);border:2.5px solid #d0daf0;
+  border-radius:12px;padding:11px 14px;
+  cursor:pointer;display:flex;align-items:flex-start;gap:12px;
+  transition:all .18s;flex:1;max-height:90px;overflow:hidden;
+}
+.opt:hover{border-color:var(--azul3);background:#f0f5ff;transform:translateX(3px);}
+.opt.selected{border-color:var(--azul);background:#e8f0fb;}
+.opt.correct{border-color:var(--verde);background:#e8f8ef;}
+.opt.incorrect{border-color:var(--rojo);background:#fdf0ef;}
+.opt.disabled{cursor:default;pointer-events:none;}
+.opt-letter{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--azul3);color:var(--blanco);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.9em;flex-shrink:0;
+}
+.opt.correct .opt-letter{background:var(--verde);}
+.opt.incorrect .opt-letter{background:var(--rojo);}
+.opt-text{font-size:.9em;color:var(--texto);line-height:1.4;padding-top:4px;}
+
+/* FEEDBACK */
+.feedback-box{
+  background:var(--blanco);
+  border-left:4px solid var(--azul3);
+  border-radius:0 8px 8px 0;
+  padding:10px 14px;
+  font-size:.84em;color:#2d3748;line-height:1.5;
+  margin-top:8px;flex-shrink:0;
+  display:none;
+  animation:fadeIn .3s ease;
+}
+.feedback-box.show{display:block;}
+.feedback-box.correct-fb{border-color:var(--verde);background:#f0faf5;}
+.feedback-box.incorrect-fb{border-color:var(--rojo);background:#fdf5f5;}
+.feedback-icon{font-weight:800;margin-right:4px;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* FOOTER */
+.exam-footer{
+  background:var(--blanco);border-top:1.5px solid #d8e3f0;
+  padding:10px 20px;display:flex;align-items:center;
+  justify-content:space-between;gap:10px;flex-shrink:0;
+}
+.btn{
+  padding:11px 22px;border:none;border-radius:10px;
+  font-size:.95em;font-weight:700;cursor:pointer;
+  transition:all .18s;display:flex;align-items:center;gap:6px;
+}
+.btn-prev{background:#eaf0fb;color:var(--azul);}
+.btn-prev:hover:not(:disabled){background:#d0daf0;}
+.btn-prev:disabled{opacity:.4;cursor:not-allowed;}
+.btn-next{background:linear-gradient(90deg,var(--azul),var(--azul3));color:var(--blanco);
+  box-shadow:0 3px 12px rgba(36,86,164,.28);}
+.btn-next:hover{box-shadow:0 5px 18px rgba(36,86,164,.4);transform:translateY(-1px);}
+.btn-finish{background:linear-gradient(90deg,#27ae60,#2ecc71);color:var(--blanco);
+  box-shadow:0 3px 12px rgba(39,174,96,.3);}
+.btn-finish:hover{box-shadow:0 5px 18px rgba(39,174,96,.45);transform:translateY(-1px);}
+.answered-count{font-size:.82em;color:#7a8aab;font-weight:600;text-align:center;}
+
+/* ── PANTALLA RESULTADOS ──────────────────────────────────────────── */
+#screenResults{
+  display:none;
+  height:100vh;
+  overflow-y:auto;
+  align-items:flex-start;
+  justify-content:center;
+  padding:20px;
+}
+.results-box{
+  background:var(--blanco);
+  border-radius:20px;
+  box-shadow:var(--sombra);
+  padding:36px 40px;
+  max-width:600px;
+  width:100%;
+  margin:auto;
+}
+.results-icon{font-size:3.5em;text-align:center;margin-bottom:10px;}
+.results-box h2{
+  text-align:center;font-size:1.5em;color:var(--azul);
+  font-weight:800;margin-bottom:4px;
+}
+.results-box .results-sub{
+  text-align:center;font-size:.9em;color:#7a8aab;margin-bottom:24px;
+}
+.score-circle{
+  width:140px;height:140px;border-radius:50%;
+  background:conic-gradient(var(--verde) 0deg, #e0e8f5 0deg);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;
+  position:relative;
+}
+.score-circle-inner{
+  width:110px;height:110px;border-radius:50%;
+  background:var(--blanco);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-pct{font-size:2em;font-weight:800;color:var(--azul);}
+.score-pct-label{font-size:.72em;color:#7a8aab;}
+.stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:20px;
+}
+.stat-card{
+  border-radius:12px;padding:16px 20px;text-align:center;
+}
+.stat-card.correct{background:#e8f8ef;border:2px solid #a8e6c3;}
+.stat-card.incorrect{background:#fdf0ef;border:2px solid #f8c0bb;}
+.stat-card.total{background:#eaf0fb;border:2px solid #c0d0ef;grid-column:span 2;}
+.stat-num{font-size:2em;font-weight:800;}
+.stat-card.correct .stat-num{color:var(--verde);}
+.stat-card.incorrect .stat-num{color:var(--rojo);}
+.stat-card.total .stat-num{color:var(--azul);}
+.stat-label{font-size:.82em;color:#4a5568;margin-top:2px;}
+.result-msg{
+  text-align:center;padding:16px 20px;border-radius:12px;
+  font-size:.95em;font-weight:600;margin-bottom:20px;line-height:1.5;
+}
+.result-msg.excelente{background:#e8f8ef;color:#1a7a42;border:2px solid #a8e6c3;}
+.result-msg.bien{background:#eaf0fb;color:#1a3a6b;border:2px solid #c0d0ef;}
+.result-msg.regular{background:#fff8e8;color:#7a5000;border:2px solid #f5d87a;}
+.result-msg.insuf{background:#fdf0ef;color:#8a1a0a;border:2px solid #f8c0bb;}
+.results-footer{
+  text-align:center;font-size:.8em;color:#9aabb8;margin-top:10px;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .welcome-box{padding:28px 20px;}
+  .welcome-box h1{font-size:1.25em;}
+  .results-box{padding:24px 18px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .exam-body{padding:0;}
+  .question-area{padding:10px 12px 0;}
+  .exam-footer{padding:8px 12px;}
+  .btn{padding:9px 14px;font-size:.88em;}
+  .q-text{font-size:.93em;}
+  .opt{padding:9px 11px;gap:9px;}
+  .opt-text{font-size:.86em;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ PANTALLA 1: BIENVENIDA ═══════════════════ -->
+<div id="screenWelcome">
+  <div class="welcome-box">
+    <div class="logo-header">🎓</div>
+    <h1>Simulador Admisión<br>Secundaria General 2026</h1>
+    <p class="credito">Prof. Francisco De Jesus Luna Benitez</p>
+    <div class="info-chips">
+      <span class="chip">📝 120 Reactivos</span>
+      <span class="chip">⏱ 120 Minutos</span>
+      <span class="chip">📊 11 Temas</span>
+    </div>
+    <p>Este simulador cubre los temas del proceso de admisión docente para Secundaria General 2026: USICAMM, LGDNNA, NEM, Metodologías, LGE, Vygotsky, Acoso Escolar, Conflictos, Red de Seguridad, Programa Analítico y más.</p>
+    <div class="input-group">
+      <label for="studentName">👤 Nombre del estudiante</label>
+      <input type="text" id="studentName" placeholder="Escribe tu nombre completo..." maxlength="80" autocomplete="off">
+    </div>
+    <button class="btn-start" onclick="startExam()">🚀 Iniciar Simulador</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PANTALLA 2: EXAMEN ═══════════════════════ -->
+<div id="screenExam">
+  <div class="exam-header">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>Simulador Admisión Secundaria General 2026</h1>
+        <div class="credito-h">Prof. Francisco De Jesus Luna Benitez</div>
+      </div>
+      <div class="timer-box" id="timerBox">
+        <span class="timer-icon">⏱</span>
+        <span id="timerDisplay">120:00</span>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-label" id="progressLabel">0 / 120</span>
+    </div>
+  </div>
+
+  <div class="exam-body">
+    <div class="question-area">
+      <div class="q-meta">
+        <span class="q-num-badge" id="qNumBadge">Pregunta 1 de 120</span>
+        <span class="q-tema" id="qTema">Tema</span>
+      </div>
+      <div class="q-text" id="qText">Cargando...</div>
+      <div class="options-list" id="optionsList"></div>
+      <div class="feedback-box" id="feedbackBox"></div>
+    </div>
+  </div>
+
+  <div class="exam-footer">
+    <button class="btn btn-prev" id="btnPrev" onclick="navigate(-1)" disabled>◀ Anterior</button>
+    <div class="answered-count" id="answeredCount">Respondidas: 0</div>
+    <button class="btn btn-next" id="btnNext" onclick="navigate(1)">Siguiente ▶</button>
+    <button class="btn btn-finish" id="btnFinish" onclick="confirmFinish()" style="display:none">✅ Finalizar</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PANTALLA 3: RESULTADOS ═══════════════════ -->
+<div id="screenResults">
+  <div class="results-box">
+    <div class="results-icon" id="resultsIcon">🎓</div>
+    <h2>Simulador Concluido</h2>
+    <div class="results-sub" id="resultsStudentName"></div>
+    <div class="score-circle" id="scoreCircle">
+      <div class="score-circle-inner">
+        <span class="score-pct" id="scorePct">0%</span>
+        <span class="score-pct-label">Aciertos</span>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card correct">
+        <div class="stat-num" id="statCorrect">0</div>
+        <div class="stat-label">✅ Correctas</div>
+      </div>
+      <div class="stat-card incorrect">
+        <div class="stat-num" id="statIncorrect">0</div>
+        <div class="stat-label">❌ Incorrectas</div>
+      </div>
+      <div class="stat-card total">
+        <div class="stat-num" id="statTotal">120</div>
+        <div class="stat-label">📝 Total de Reactivos</div>
+      </div>
+    </div>
+    <div class="result-msg" id="resultMsg"></div>
+    <div class="results-footer">
+      Simulador Admisión Secundaria General 2026<br>
+      Prof. Francisco De Jesus Luna Benitez
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {text:"¿Cuál de las siguientes acciones o actividades responde a un diseño universal de aprendizaje?",options:["La maestra Verónica realiza adecuaciones a sus situaciones didácticas para que Nelly pueda realizar el trabajo de la misma forma que el resto del grupo", "La maestra Flor diversifica las actividades planeadas de tal forma que atienden las diversas características de su grupo", "La maestra Rocío realiza ajustes razonables para que los estudiantes con discapacidad participen en igualdad de condiciones"],correct:1,feedback:"La opción correcta es B. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Qué planteamiento de la estrategia socioemocional del Plan de Estudio para la Educación Preescolar, Primaria y Secundaria expresa: Plantear los avances que las niñas, los niños y adolescentes pueden alcanzar en un determinado periodo, facilita identificar qué se quiere lograr al finalizar los procesos formativos?",options:["Plantear metas de aprendizaje", "Determinar ejes temáticos", "Situaciones de aprendizaje"],correct:0,feedback:"La opción correcta es A. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Cuál es uno de los propósitos de la estrategia socioemocional del Plan de Estudio para la Educación Preescolar, Primaria y Secundaria?",options:["Promover que en el colectivo docente se vea a las niñas, niños y adolescentes como personas con todo el potencial para desarrollar diversas capacidades", "Gestionar la disciplina del alumnado mediante lineamientos del sistema educativo, para tener orden en el aula", "Reemplazar la función tutorial de los padres de familia para que actúen como mediadores en la educación emocional, tomando en consideración los cambios familiares que existen en la actualidad"],correct:0,feedback:"La opción correcta es A. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Cuál de las siguientes acciones corresponde al eje formativo del Programa Nacional de Convivencia Escolar de Apego a las Normas?",options:["Cero tolerancia a la violencia", "Límites como oportunidad formativa", "Participación de la comunidad educativa"],correct:1,feedback:"La opción correcta es B. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"Son tipos de conocimiento esenciales para lograr una formación integral",options:["Declarativos, procedimentales y actitudinales", "Empíricos, sistemáticos y científicos", "Previo, activo e innovador"],correct:0,feedback:"La opción correcta es A. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Qué estrategia propuesta en el marco del Plan de Estudio para la Educación Preescolar, Primaria y Secundaria es el conjunto de situaciones didácticas articuladas e integradas que permiten la colaboración de maestras, maestros y las NNA en la resolución de un problema de su comunidad o interés particular, y la obtención de algún producto?",options:["Aprendizaje colaborativo", "Aprendizaje basado en problemas", "Aprendizaje basado en proyectos"],correct:2,feedback:"La opción correcta es C. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"Selecciona el eje articulador que es más transversal que el resto pues tiende líneas hacia todos los campos formativos",options:["Pensamiento crítico", "Artes y experiencias estéticas", "Educación ambiental"],correct:0,feedback:"La opción correcta es A. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Cuál es la situación de aprendizaje que se deriva del Programa de Estudios de la asignatura de Nuestros Saberes referente al contenido curricular ¿Cuál es mi responsabilidad con el lugar en que vivo?",options:["Investigar uno o más servicios públicos de las personas de su localidad", "Participar en actividades para el cuidado de su localidad", "Identificar problemas que afectan el cuidado de espacios públicos y otros lugares de la localidad"],correct:1,feedback:"La opción correcta es B. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Qué campo formativo reconoce las características físicas que conforman nuestro planeta Tierra, así como la gran cantidad de sistemas y procesos que ocurren en él, e identifica a la geografía como la ciencia que los estudia?",options:["Saberes y Pensamiento Científico", "Ética, Naturaleza y Sociedades", "De lo Humano y lo Comunitario"],correct:1,feedback:"La opción correcta es B. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Cuál es el contenido curricular del grado o fase al que hace referencia el siguiente enunciado: Exploración de las relaciones empáticas, de reciprocidad y de ayuda con compañeras y compañeros?",options:["Segundo grado de primaria", "Segundo de preescolar", "Fase 3, grado 1"],correct:1,feedback:"La opción correcta es B. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Qué proceso de desarrollo de aprendizaje de los campos formativos del Plan de Estudio para la Educación Preescolar, Primaria y Secundaria expresa: Indagar las regularidades del campo o disciplina para profundizar en ellas y construir comunidades de aprendizaje que trabajen en resolver problemas abiertos sobre el campo o la disciplina y su relación con otros campos?",options:["Conectar", "Problematizar", "Elaborar"],correct:2,feedback:"La opción correcta es C. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"Elige el orden correcto de las fases para el desarrollo del Consejo Técnico Escolar y de zona en el Sistema Educativo Mexicano\\n\\n- Evaluación\\n- Planeación\\n- Seguimiento\\n- Implementación",options:["Planeación-Implementación-Seguimiento-Evaluación", "Planeación-Seguimiento-Evaluación-Implementación", "Evaluación-Planeación-Implementación-Seguimiento"],correct:0,feedback:"La opción correcta es A. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"Selecciona la opción que aborda correctamente la concepción de \\\"El estudiante como centro del proceso educativo\\\"",options:["Se favorece el desarrollo de capacidades humanas mediante la generación de ambientes de aprendizaje incluyentes, equitativos y solidarios, bajo una perspectiva del enfoque humanista.", "Se favorece la comprensión del conocimiento histórico, científico, tecnológico y el de las humanidades reconociendo los aportes realizados desde los saberes de nuestros pueblos originarios", "Se favorece el trabajo en comunidad para el diálogo, participación y co-construcción de la vida comunitaria a partir de la gestión de experiencias cotidianas de aprendizaje, su implicación histórica, cultural, social, política y territorial."],correct:0,feedback:"La opción correcta es A. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿A qué hace referencia la acepción de promover un entorno de aprendizaje que considere las experiencias de vida de las NNA y el reconocimiento de sus capacidades físicas, sociales, culturales, emocionales, así como lingüísticas y cognitivas, como puntos de partida del proceso de enseñanza-aprendizaje?",options:["Atención y valoración de la diversidad", "Inclusión y equidad", "Enfoque de derechos humanos"],correct:1,feedback:"La opción correcta es B. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿A qué se refiere la Norma General para la evaluación de los aprendizajes esperados, acreditación, regularización, promoción y certificación de los educandos de la educación básica, publicada en 2019, cuando aborda el concepto de 'evaluación auténtica'?",options:["Se evalúan los resultados que arroja el programa educativo y la práctica educativa del personal docente-directivo-supervisión-administrativa, procurando que sean significativas para niñas, niños, adolescentes, docentes, madres, padres y comunidad escolar", "Realiza procesos de evaluación, acreditación y certificación que se ajustan a las particularidades de las y los estudiantes, para favorecer su desarrollo académico, procurando que sean congruentes y signifiquen un nivel de madurez adquirido de acuerdo a su edad", "Se refiere a una evaluación de desempeño. Se solicita al estudiantado que use lo aprendido en contextos de la vida real y plantea desafíos que estimulan el uso pertinente del conocimiento y el desarrollo de habilidades complejas"],correct:2,feedback:"La opción correcta es C. Revisa el material de USICAMM 2026.",tema:"USICAMM"},
+  {text:"¿Cuántos derechos fundamentales enuncia el Artículo 13 de la LGDNNA?",options:["15 derechos", "20 derechos", "25 derechos"],correct:1,feedback:"El Artículo 13 enuncia 20 derechos fundamentales que la guía agrupa en 5 pilares estratégicos.",tema:"LGDNNA"},
+  {text:"¿Qué principio establece que siempre se elegirá la interpretación legal que mayor beneficio otorgue a la niñez cuando existan distintas interpretaciones?",options:["Igualdad Sustantiva", "Interés Superior de la Niñez", "No Discriminación"],correct:1,feedback:"El Interés Superior de la Niñez (Art. 2 y 3) es la consideración primordial en la toma de decisiones y guía la interpretación legal en favor de los menores.",tema:"LGDNNA"},
+  {text:"¿Qué artículo de la LGDNNA establece el Derecho a la Identidad, que incluye nombre, apellidos, nacionalidad y conocer la filiación?",options:["Art. 17", "Art. 21 y 22", "Art. 19"],correct:2,feedback:"El Art. 19 regula el Derecho a la Identidad, señalando que la falta de documentación no será obstáculo para garantizar los derechos del menor.",tema:"LGDNNA"},
+  {text:"¿Cuál es la transformación central que realiza la LGDNNA respecto a niñas, niños y adolescentes en el ámbito jurídico?",options:["De sujetos de derechos a objetos de protección institucional", "De objetos de protección a titulares plenos de derechos", "De beneficiarios de programas sociales a sujetos tutelados"],correct:1,feedback:"La LGDNNA transforma la visión jurídica: los menores dejan de ser objetos de protección para convertirse en titulares plenos de derechos.",tema:"LGDNNA"},
+  {text:"¿Qué artículo de la LGDNNA obliga a que los presupuestos incluyan la asignación de recursos para cumplir con los derechos de la niñez, bajo el principio 'no hay derechos sin presupuesto'?",options:["Solo el Art. 13", "Art. 2 y 3", "Art. 36 y 37"],correct:1,feedback:"La Garantía Presupuestal (Art. 2 y 3) establece la obligación ineludible de incorporar en los presupuestos los recursos para cumplir la ley.",tema:"LGDNNA"},
+  {text:"¿Cuáles son las tres obligaciones concretas que impone el Derecho de Prioridad (Art. 17) a la sociedad y al Estado?",options:["Protección y socorro; registro de nacimiento; diseño de políticas", "Protección y socorro; atención preferente en servicios; diseño de políticas públicas", "Atención en servicios; educación gratuita; acceso a la justicia"],correct:1,feedback:"El Art. 17 obliga a: 1) brindar auxilio prioritario en emergencias, 2) atender a menores antes que adultos en los servicios, y 3) considerarlos eje central en políticas públicas.",tema:"LGDNNA"},
+  {text:"El Art. 39 de la LGDNNA prohíbe restringir los derechos de los menores por causas como origen étnico, género o condición socioeconómica. ¿A qué tipo de igualdad corresponde este artículo?",options:["Igualdad Sustantiva", "Autonomía Progresiva", "Igualdad Formal – Derecho a la No Discriminación"],correct:2,feedback:"El Art. 39 regula la Igualdad Formal a través del Derecho a la No Discriminación, prohibiendo restricciones basadas en características personales.",tema:"LGDNNA"},
+  {text:"¿Bajo qué condición el Principio de No Separación (Art. 23) permite que un niño sea separado de quien ejerce la patria potestad?",options:["Nunca puede ocurrir bajo ninguna circunstancia", "Solo por orden de autoridad competente, mediante debido proceso y como último recurso para preservar su Interés Superior", "Solo cuando los padres lo soliciten voluntariamente a las autoridades"],correct:1,feedback:"El Art. 23 establece que la separación únicamente es posible mediante orden de autoridad competente, con debido proceso y como último recurso.",tema:"LGDNNA"},
+  {text:"Según el Art. 50 de la LGDNNA, ¿cuánto tiempo se fomenta la lactancia materna exclusiva antes de introducir alimentación complementaria?",options:["3 meses", "6 meses", "12 meses"],correct:1,feedback:"El Art. 50 promueve la lactancia materna exclusiva durante los primeros 6 meses y la lactancia complementaria hasta los 2 años.",tema:"LGDNNA"},
+  {text:"¿Qué establece el Art. 60 de la LGDNNA sobre el juego y la recreación en la vida de los menores?",options:["Son actividades complementarias no esenciales que pueden limitarse", "Son factores primordiales del desarrollo; imponer regímenes desproporcionados que los menoscaben es ilegal", "Solo aplican en el ámbito escolar y deben ser supervisados"],correct:1,feedback:"El Art. 60 reconoce el juego y la recreación como factores primordiales del desarrollo, siendo ilegal imponer regímenes que limiten este derecho.",tema:"LGDNNA"},
+  {text:"¿Cuál de los siguientes enunciados describe mejor la naturaleza de las metodologías sociocríticas?",options:["Son recetas pedagógicas rígidas que los maestros deben seguir al pie de la letra para garantizar resultados uniformes.", "Son posibilidades de acercamiento interdisciplinar que representan un cambio fundamental en cómo concebimos el aprendizaje.", "Son instrumentos de evaluación estandarizada que permiten medir el avance académico de los estudiantes a nivel nacional."],correct:1,feedback:"Las metodologías sociocríticas no son recetas rígidas, sino posibilidades de acercamiento interdisciplinar. Respetan y exigen la creatividad del maestro, reconstruyen significados a partir de escenarios pedagógicos reales y convierten a los estudiantes en sujetos solidarios y responsables.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál es el propósito central del Aprendizaje Basado en Proyectos Comunitarios como metodología sociocrítica?",options:["Lograr que los estudiantes memoricen los contenidos del programa sintético mediante actividades lúdicas repetitivas.", "Explorar el entorno inmediato para identificar situaciones-problema, promover diversidad de soluciones y tejer redes con la comunidad.", "Desarrollar habilidades digitales y tecnológicas para que los estudiantes se inserten en el mercado laboral global."],correct:1,feedback:"El Aprendizaje Basado en Proyectos Comunitarios permite explorar el entorno inmediato para identificar situaciones-problema, promover la diversidad de soluciones y tejer redes con distintos actores de la comunidad. Sus características clave son la experimentación creativa, la diversidad de lenguajes y el involucramiento gradual de la comunidad.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál es la diferencia esencial entre el Aprendizaje Basado en Problemas (ABP) y el Aprendizaje Servicio (AS)?",options:["El ABP integra ciencias y artes, mientras que el AS se enfoca exclusivamente en la resolución matemática de problemas.", "El ABP orienta al pensamiento crítico y análisis de causas y efectos; el AS combina el contenido curricular con el servicio solidario a una necesidad real.", "El ABP trabaja en proyectos individuales de investigación, mientras que el AS siempre se desarrolla en equipos de cinco estudiantes."],correct:1,feedback:"Según la Matriz de Síntesis, el ABP se enfoca en el análisis profundo de causas y efectos para generar pensamiento crítico, mientras que el Aprendizaje Servicio combina el contenido curricular (aprendizaje intencionado) + necesidad social (servicio solidario) = protagonismo activo del estudiante.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál de las siguientes situaciones describe correctamente una aplicación de la Indagación STEAM en el aula?",options:["Los estudiantes memorizan las tablas de multiplicar y repiten los pasos de un procedimiento matemático definido por el maestro.", "Los estudiantes solo dibujan y pintan cuadros relacionados con el tema de ciencias naturales del programa sintético.", "Los estudiantes se comprometen con preguntas orientadas, priorizan evidencia en diseños experimentales y construyen argumentos explicativos con coherencia."],correct:2,feedback:"La Visión STEAM para México reconoce que la educación debe ser integral. Las artes y la lengua convergen con la capacidad numérica y el pensamiento computacional para: comprometer a los estudiantes con preguntas orientadas, priorizar la evidencia en diseños experimentales y construir argumentos explicativos con coherencia.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál es la función del Momento 3 (Planificación) dentro de la Fase 1 del Proyecto Comunitario?",options:["Identificar la situación real e insumo inicial del problema detectado en la comunidad escolar.", "Elaborar la primera versión del producto final del proyecto para presentarla a la comunidad.", "Negociar los pasos, las producciones necesarias y los tiempos para el desarrollo del proyecto."],correct:2,feedback:"La Fase 1 (Planeación) del Proyecto Comunitario tiene 3 momentos: Momento 1 – Identificación (situación real e insumo inicial), Momento 2 – Recuperación (vincular saberes previos y generar disonancia), Momento 3 – Planificación (negociar pasos, producciones y tiempos).",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál es el resultado esperado del Aprendizaje Servicio como metodología sociocrítica?",options:["Un examen escrito que demuestre que los estudiantes memorizaron los conceptos del tema abordado.", "Un servicio real que transforma una necesidad comunitaria, combinando logros académicos con objetivos de servicio.", "Un prototipo tecnológico presentado en feria de ciencias para la evaluación de los padres de familia."],correct:1,feedback:"Según la Matriz de Síntesis Metodológica, el resultado esperado del Aprendizaje Servicio es: un servicio real que transforma una necesidad comunitaria. Es contrario a la simple acumulación académica; exige que los estudiantes desarrollen sentido de responsabilidad sobre su entorno.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál es el propósito del Momento 9 (Difusión) dentro de la Fase 3 (Intervención) del Proyecto Comunitario?",options:["Elaborar un portafolio de evidencias que identifique avances y dificultades del aprendizaje de los alumnos.", "Realizar la presentación del producto final del proyecto ante la comunidad escolar y su entorno.", "Negociar nuevamente los pasos y tiempos del proyecto con el equipo docente del plantel."],correct:1,feedback:"La Fase 3 (Intervención) del Proyecto Comunitario incluye: Momento 8 – Integración (exposición, retroalimentación y ajuste), Momento 9 – Difusión (presentación del producto final), Momento 10 – Consideraciones (seguimiento del impacto), Momento 11 – Avances (decisiones para futuros proyectos).",tema:"Metodologías Sociocríticas"},
+  {text:"¿Qué distingue al Programa Analítico del Programa Sintético según el Diseño Creativo descrito en la guía?",options:["El Programa Analítico es elaborado exclusivamente por la SEP para garantizar la uniformidad curricular en todo el país.", "El Programa Analítico es una estrategia de contextualización que adapta lo establecido en los programas oficiales a las condiciones particulares de la escuela y el grupo, articulando las metodologías sociocríticas.", "El Programa Analítico es un formato burocrático que el maestro llena al inicio del ciclo escolar para cumplir con los requisitos administrativos."],correct:1,feedback:"La guía es muy clara: el Programa Analítico NO es un formato burocrático ni se llena con 'alguna receta'. Es una estrategia de contextualización. La premisa es reconocer al maestro como profesional de la enseñanza. Su objetivo es adecuar lo establecido en los programas oficiales a las condiciones particulares de la escuela y el grupo.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Qué analiza el Primer Plano del Diseño Creativo: 'Análisis del Contexto Socioeducativo' (Lectura de la Realidad)?",options:["Exclusivamente los resultados de las evaluaciones nacionales e internacionales aplicadas al grupo escolar.", "Las condiciones académicas, personales y familiares de los estudiantes y maestros, el contexto internacional/nacional/local, los procesos de aprendizaje y las necesidades de convivencia planetaria.", "Únicamente el presupuesto disponible en la escuela para la compra de materiales y recursos didácticos del ciclo escolar."],correct:1,feedback:"El Primer Plano (Análisis del Contexto Socioeducativo) es el punto de partida. Analiza: condiciones académicas, personales y familiares; elementos del contexto internacional, nacional, estatal y local; los procesos de aprendizaje de los alumnos y sus dificultades; e intersección del papel de los padres, contexto social y necesidades de convivencia planetaria.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál es la característica que mejor define al Plano de Codiseño (Plano 3) del Programa Analítico?",options:["Articular los contenidos del programa sintético con la lectura de la realidad, usando el contexto para enseñar contenidos ya existentes.", "Incorporar nuevos contenidos no contemplados en los programas sintéticos, pero que responden a necesidades locales imperativas, con su respectiva justificación.", "Seleccionar cuáles contenidos del programa sintético se omitirán durante el ciclo escolar para ahorrar tiempo pedagógico."],correct:1,feedback:"El Plano 3 (Codiseño) incorpora nuevos contenidos no contemplados en los programas sintéticos pero que responden a necesidades locales imperativas. La Regla de Oro: todo contenido de codiseño debe llevar una justificación de su incorporación y cómo abona al aprendizaje. Ejemplos: Lengua de Señas Mexicana, lenguas indígenas, recuperación emocional.",tema:"Metodologías Sociocríticas"},
+  {text:"¿Cuál es la característica de la educación que, según el Artículo 7 de la LGE, prohíbe que la prestación del servicio educativo se condicione a cualquier contraprestación o pago?",options:["Laica: la educación se mantiene completamente ajena a cualquier doctrina religiosa en los planteles.", "Gratuita: está prohibido condicionar la prestación del servicio educativo a cualquier contraprestación o pago.", "Pública: la educación es impartida y administrada directamente por el Estado con fines de orden público."],correct:1,feedback:"El Art. 7 de la LGE define cinco características irrenunciables de la educación: Universal, Inclusiva, Pública, Gratuita y Laica. La gratuidad implica específicamente que está prohibido condicionar la prestación del servicio a cualquier contraprestación o pago.",tema:"Ley General de Educación"},
+  {text:"¿Cuál es el centro de la acción pública que coloca la Nueva Escuela Mexicana, según el Artículo 11 de la LGE?",options:["La formación de ciudadanos competitivos capaces de responder a los retos del mercado laboral global.", "El máximo logro de aprendizaje de niñas, niños, adolescentes y jóvenes.", "La estandarización curricular nacional para garantizar resultados uniformes en todas las regiones del país."],correct:1,feedback:"El Art. 11 establece que la NEM buscará la equidad, la excelencia y la mejora continua, colocando en el centro de la acción pública el máximo logro de aprendizaje de niñas, niños, adolescentes y jóvenes.",tema:"Ley General de Educación"},
+  {text:"¿Cuál de las siguientes situaciones ejemplifica el criterio 'inclusiva' de la educación según el Artículo 16 de la LGE?",options:["Una escuela que promueve la identidad nacional a través del estudio de la historia y los símbolos patrios.", "Una escuela que elimina las distintas barreras al aprendizaje y a la participación, realizando ajustes razonables para todos los alumnos.", "Una escuela que busca el mejoramiento permanente del pensamiento crítico de sus estudiantes a través de estrategias innovadoras."],correct:1,feedback:"El criterio 'inclusiva' del Art. 16 significa tomar en cuenta los ritmos de aprendizaje y eliminar las barreras al aprendizaje y a la participación, incluyendo los ajustes razonables para garantizar el acceso de todos.",tema:"Ley General de Educación"},
+  {text:"Según el Artículo 15 de la LGE, ¿cuál de los siguientes es un fin de la educación impartida por el Estado?",options:["Formar ciudadanos con habilidades para el emprendimiento y la economía de mercado globalizada.", "Promover la cultura de la paz mediante la tolerancia, el diálogo constructivo y la no violencia.", "Garantizar que todos los estudiantes obtengan los mismos resultados en las evaluaciones estandarizadas."],correct:1,feedback:"El Art. 15 establece los objetivos permanentes de la educación estatal. Entre ellos se encuentran: Desarrollo Integral, Dignidad Humana, Respeto a la Naturaleza, Amor a la Patria, Pluralidad Intercultural y Cultura de la Paz (tolerancia, diálogo constructivo y no violencia).",tema:"Ley General de Educación"},
+  {text:"¿Cuál es el papel que reconoce la LGE a los maestros y maestras dentro de la Nueva Escuela Mexicana?",options:["Son ejecutores de planes y programas diseñados por las autoridades educativas federales.", "Son agentes fundamentales del proceso educativo y profesionales de la formación (Art. 13 NEM).", "Son administradores del aprendizaje que reportan resultados a los padres de familia periódicamente."],correct:1,feedback:"La revalorización docente es uno de los pilares de la NEM (Arts. 11-14). La ley reconoce a maestras y maestros como agentes fundamentales del proceso educativo y como profesionales de la formación, lo que implica su formación continua y dignificación laboral.",tema:"Ley General de Educación"},
+  {text:"¿Cuál es el objetivo del Consejo de Participación Escolar, según los Artículos 131-132 de la LGE?",options:["Supervisar el desempeño individual de cada docente y emitir recomendaciones curriculares a las autoridades.", "Coadyuvar para que los resultados de las evaluaciones contribuyan a la mejora continua de la educación.", "Gestionar los recursos económicos de la escuela y administrar el presupuesto asignado por la SEP."],correct:1,feedback:"Los Arts. 131-132 establecen que cada escuela instalará un Consejo de Participación integrado por padres, maestros y autoridades. Su función primaria es coadyuvar para que los resultados de las evaluaciones contribuyan a la mejora continua de la educación.",tema:"Ley General de Educación"},
+  {text:"¿Cuál de las siguientes características NO corresponde al criterio 'democrática' de la educación según el Artículo 16 de la LGE?",options:["Un sistema de vida fundado en el mejoramiento constante económico, social y cultural del pueblo.", "Comprensión, respeto e intercambio lingüístico y cultural entre comunidades.", "Fomentar la participación activa de la sociedad en el proceso de mejora del sistema educativo."],correct:1,feedback:"La opción B describe el criterio 'intercultural' (promover la comprensión, respeto e intercambio lingüístico y cultural), NO el criterio democrático. El criterio 'democrática' se refiere a un sistema de vida fundado en el mejoramiento constante del pueblo.",tema:"Ley General de Educación"},
+  {text:"¿Cuál es la función del criterio 'humanista' de la educación según el Artículo 16 de la LGE?",options:["Defender la soberanía nacional y garantizar la continuidad histórica y cultural de México.", "Fomentar el aprecio por la dignidad humana y rechazar actitudes que favorezcan los privilegios de grupo.", "Desarrollar el pensamiento lógico-matemático y las habilidades tecnológicas del estudiante."],correct:1,feedback:"El criterio 'humanista' del Art. 16 apunta al aprecio por la dignidad humana y al rechazo de privilegios de cualquier tipo. Este criterio es diferente del 'nacional' (soberanía) y del 'cognitivo' (habilidades matemáticas/tecnológicas).",tema:"Ley General de Educación"},
+  {text:"Según el Artículo 17 de la LGE, ¿qué exige la orientación integral de la Nueva Escuela Mexicana a los docentes?",options:["Que se especialicen exclusivamente en un dominio disciplinar para impartir contenidos con mayor profundidad.", "Que dominen los procesos de enseñanza-aprendizaje acordes con una visión holística del estudiante.", "Que apliquen únicamente los métodos de evaluación estandarizados aprobados por la autoridad educativa."],correct:1,feedback:"El Art. 17 establece que la orientación integral no se limita a la memorización académica, sino a la formación para la vida vinculando la escuela con la comunidad. Esto exige la adecuada formación de los docentes en procesos de enseñanza-aprendizaje con visión holística.",tema:"Ley General de Educación"},
+  {text:"¿Cuál de las siguientes opciones describe correctamente la obligación irrenunciable de los padres de familia según el Artículo 129 de la LGE?",options:["Gestionar recursos económicos para apoyar las actividades extracurriculares de la institución educativa.", "Revisar constantemente el progreso, desempeño y conducta de sus hijos, y colaborar con la institución educativa.", "Elegir libremente la institución educativa que consideren más conveniente para el desarrollo de sus hijos."],correct:1,feedback:"El Art. 129 establece las obligaciones de los padres: hacer que sus hijos reciban educación obligatoria, revisar su progreso y conducta, colaborar con la institución, informar sobre cambios de conducta y acudir a los llamados para la revisión del desempeño.",tema:"Ley General de Educación"},
+  {text:"¿Cuál es el núcleo integrador de los procesos de enseñanza y aprendizaje según la Nueva Escuela Mexicana (NEM)?",options:["La evaluación formativa", "La comunidad", "Los campos formativos"],correct:1,feedback:"La comunidad es el núcleo integrador de la NEM. La escuela ya no es un espacio aislado, sino el centro de las relaciones sociales; el punto de partida de toda enseñanza es la vida comunitaria de las alumnas y alumnos.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Cuántos ejes articuladores integran el currículo de la NEM?",options:["4 ejes articuladores", "5 ejes articuladores", "7 ejes articuladores"],correct:2,feedback:"La NEM contempla 7 ejes articuladores: Inclusión, Pensamiento Crítico, Interculturalidad Crítica, Igualdad de Género, Vida Saludable, Apropiación de las Culturas y Artes y Experiencias Estéticas. No son asignaturas, sino perspectivas transversales.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Cuántos campos formativos integran la estructura curricular de la NEM, sustituyendo la organización por asignaturas aisladas?",options:["4 campos formativos", "6 campos formativos", "7 campos formativos"],correct:0,feedback:"Los 4 campos formativos son: Lenguajes; Saberes y Pensamiento Científico; Ética, Naturaleza y Sociedades; y De lo Humano y lo Comunitario. Reorganizan los contenidos para que el alumno comprenda la realidad como una totalidad compleja.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Qué eje articulador de la NEM tiene como propósito romper modelos patriarcales y fomentar el respeto mutuo entre mujeres y hombres?",options:["Inclusión", "Igualdad de Género", "Vida Saludable"],correct:1,feedback:"El eje Igualdad de Género busca romper esquemas patriarcales y promover el reconocimiento de los mismos derechos para mujeres y hombres dentro y fuera del aula.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Cuál es el propósito principal de la evaluación formativa según la NEM?",options:["Sustentar el otorgamiento de calificaciones y certificados", "Retroalimentar el proceso educativo mediante el diálogo", "Asignar un número requerido por el sistema educativo (LGE)"],correct:1,feedback:"La evaluación formativa (pedagógica) retroalimenta el proceso educativo mediante el diálogo. El error se interpreta como un peldaño del aprendizaje, no se penaliza, y el enfoque está en qué se ha aprendido y qué obstáculos existen en la vida diaria.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Qué campo formativo integra las disciplinas de Matemáticas, Biología, Física y Química?",options:["Lenguajes", "Ética, Naturaleza y Sociedades", "Saberes y Pensamiento Científico"],correct:2,feedback:"Saberes y Pensamiento Científico agrupa Matemáticas, Biología, Física y Química, con el foco de comprender y explicar fenómenos naturales y procesos sociales mediante la indagación.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Cuántas fases de aprendizaje contempla la NEM para organizar el continuo educativo desde inicial hasta secundaria?",options:["4 fases", "6 fases", "8 fases"],correct:1,feedback:"La NEM organiza el proceso educativo en 6 fases: Fase 1 (Educación Inicial), Fase 2 (Preescolar), Fase 3 (Primaria 1° y 2°), Fase 4 (Primaria 3° y 4°), Fase 5 (Primaria 5° y 6°) y Fase 6 (Secundaria).",tema:"Nueva Escuela Mexicana"},
+  {text:"¿A qué fase de aprendizaje de la NEM corresponde la Educación Inicial (de 0 a 2 años, 11 meses)?",options:["Fase 1", "Fase 2", "Fase 3"],correct:0,feedback:"La Fase 1 corresponde a la Educación Inicial (0 a 2 años, 11 meses). La Fase 2 es Preescolar y la Fase 3 cubre Primaria 1° y 2°.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Cómo define la NEM el rol del docente en relación con el diseño curricular?",options:["Como un ejecutor técnico de programas nacionales", "Como un diseñador curricular activo", "Como un administrador de contenidos establecidos por la SEP"],correct:1,feedback:"La NEM reivindica al docente como diseñador curricular activo. Tiene libertad didáctica para reinventar la docencia y construir saberes según las necesidades vivenciales de sus alumnos, no solo ejecutar un programa.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Qué fase de aprendizaje de la NEM abarca Secundaria (1°, 2° y 3°)?",options:["Fase 4", "Fase 5", "Fase 6"],correct:2,feedback:"La Fase 6 corresponde a Secundaria (1°, 2° y 3°). Es la última fase del continuo educativo que contempla la NEM, desde la Educación Inicial hasta la Secundaria.",tema:"Nueva Escuela Mexicana"},
+  {text:"¿Cuál es el concepto vygotskiano que describe el espacio entre lo que un alumno puede hacer de manera independiente y lo que puede lograr con ayuda de un adulto o par más capaz?",options:["Zona de Desarrollo Real: lo que el alumno ya domina sin apoyo externo alguno.", "Zona de Desarrollo Próximo (ZDP): el espacio entre el nivel real y el potencial con ayuda.", "Zona de Confort Cognitivo: área en la que el alumno trabaja sin esfuerzo ni reto."],correct:1,feedback:"La ZDP es el núcleo de la propuesta educativa vygotskiana. Es justo en este espacio donde ocurre el aprendizaje real y se forma el potencial del alumno, siempre mediado por la interacción social.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál de las siguientes situaciones describe mejor el papel del docente como mediador sociocultural según Vygotsky?",options:["El docente transmite los contenidos de forma expositiva y los alumnos los memorizan para el examen.", "El docente diseña retos, brinda andamiaje, usa el diálogo y sabe cuándo retirar el apoyo para fomentar la autonomía.", "El docente evalúa únicamente los resultados finales sin involucrarse en el proceso de aprendizaje."],correct:1,feedback:"El docente vygotskiano asume cuatro roles simultáneos: diseñador de retos, proveedor de soportes, estratega del lenguaje y espectador empático. Nunca sustituye la actividad mental constructiva del estudiante.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál es la principal diferencia entre herramientas y signos en la teoría sociocultural de Vygotsky?",options:["Las herramientas tienen orientación externa (transforman objetos y el entorno), mientras que los signos tienen orientación interna (transforman la mente del sujeto).", "Las herramientas producen cambios en el sujeto, mientras que los signos transforman el entorno físico y los objetos materiales.", "Las herramientas y los signos son conceptos equivalentes y Vygotsky los usa de manera intercambiable en toda su teoría."],correct:0,feedback:"Las herramientas (martillo, computadora) producen cambios en el mundo externo. Los signos (lenguaje, escritura, números) son instrumentos psicológicos que transforman internamente la mente y la estructura del pensamiento.",tema:"Vygotsky / ZDP"},
+  {text:"Según Vygotsky, ¿cuándo se produce el momento clave del desarrollo cognitivo del niño?",options:["Cuando el niño alcanza la madurez biológica que le permite incorporar conocimientos de forma autónoma.", "Cuando el lenguaje y la actividad práctica convergen, transformando el pensamiento en pensamiento verbal racional.", "Cuando el docente presenta contenidos de manera estructurada, secuencial y libre de ambigüedades."],correct:1,feedback:"Para Vygotsky, la convergencia del lenguaje y la acción práctica es el punto de inflexión del desarrollo. El lenguaje deja de ser solo comunicación y se convierte en la herramienta que reorganiza el pensamiento.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál de las siguientes afirmaciones refleja correctamente la relación entre aprendizaje y desarrollo en la perspectiva vygotskiana?",options:["El desarrollo biológico precede al aprendizaje; hay que esperar que el niño madure para enseñarle nuevos contenidos.", "Aprendizaje y desarrollo son procesos independientes que no guardan ninguna relación entre sí.", "El aprendizaje precede y jala al desarrollo; una buena enseñanza apunta a lo que el alumno aún no domina pero puede alcanzar con guía."],correct:2,feedback:"Vygotsky invirtió la relación tradicional: no esperamos a que el niño esté listo, sino que una enseñanza adecuada sirve de imán para que el nivel potencial de desarrollo se integre con el actual.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál de los siguientes roles NO corresponde al docente como mediador sociocultural en la teoría de Vygotsky?",options:["Diseñador de retos que obligan al alumno a implicarse en un esfuerzo de comprensión.", "Receptor pasivo de los aprendizajes del alumno sin intervenir en el proceso educativo.", "Espectador empático que sabe cuándo retirar la ayuda para consolidar la autonomía del estudiante."],correct:1,feedback:"El docente vygotskiano es siempre activo y mediador. Un 'receptor pasivo' describe exactamente lo contrario de la mediación sociocultural: el maestro ayuda al proceso pero nunca sustituye la actividad mental del estudiante.",tema:"Vygotsky / ZDP"},
+  {text:"¿Qué significa que el alumno es un 'ente social historizado' dentro de la teoría sociocultural de Vygotsky?",options:["Que el alumno memoriza hechos históricos de su comunidad para aprobar los exámenes estandarizados.", "Que el alumno es el producto de múltiples interrelaciones sociales y culturales acumuladas a lo largo de su vida.", "Que el alumno aprende únicamente a través de la historia oral transmitida por su familia."],correct:1,feedback:"El alumno no es una pizarra en blanco. Llega al aula con una historia de interacciones sociales y culturales que moldean sus esquemas de conocimiento. La escuela debe partir de esas realidades.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál de las siguientes prácticas docentes es INCOMPATIBLE con el enfoque sociocultural de Vygotsky?",options:["Fomentar el trabajo colaborativo entre pares para construir conocimiento de forma conjunta.", "Esperar a que el alumno madure biológicamente antes de introducir contenidos más complejos.", "Diseñar actividades que partan de los conocimientos previos y del contexto cultural del alumno."],correct:1,feedback:"Esperar la maduración biológica es la postura contraria a Vygotsky. Él sostiene que la enseñanza debe operar siempre en la ZDP, apuntando a lo que el alumno aún no domina para jalarlo hacia el desarrollo.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál es la función principal de la escuela desde la perspectiva sociocultural vygotskiana?",options:["Transmitir conocimientos de forma estandarizada e igual para todos los alumnos, sin considerar el contexto.", "Ser un laboratorio cultural en el que el contexto sociocultural es la materia prima del aprendizaje.", "Evaluar el nivel de madurez biológica de cada alumno para determinar qué contenidos puede aprender."],correct:1,feedback:"Para Vygotsky, la escuela es mucho más que un espacio de instrucción. Es el laboratorio donde la cultura plural, los contenidos con sentido y la comunidad integradora se articulan para producir aprendizaje real.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál de las siguientes situaciones ejemplifica mejor la Zona de Desarrollo Próximo (ZDP) en el aula?",options:["Un alumno resuelve ejercicios de matemáticas que ya domina perfectamente sin ninguna dificultad.", "Un docente asigna tareas tan complejas que los alumnos no pueden resolverlas ni con orientación especializada.", "Un docente guía a sus alumnos en la resolución de problemas que aún no resuelven solos, pero sí con apoyo."],correct:2,feedback:"La ZDP existe solo cuando hay un reto alcanzable con ayuda. Si ya se domina (opción A) o es inalcanzable incluso con ayuda (opción B), no se produce aprendizaje en el sentido vygotskiano.",tema:"Vygotsky / ZDP"},
+  {text:"¿Cuál es el elemento que distingue al acoso escolar de una pelea aislada o riña común?",options:["Que ocurra únicamente dentro de las instalaciones del plantel escolar.", "Que combine poder desigual, intención, repetición y duración sostenida.", "Que involucre necesariamente a más de dos estudiantes al mismo tiempo."],correct:1,feedback:"El Protocolo establece que el acoso escolar se define por cuatro elementos simultáneos: poder desigual, intención de dañar, repetición de la conducta y duración sostenida en el tiempo. La ausencia de alguno de estos elementos lo convierte en un conflicto ordinario.",tema:"Acoso Escolar"},
+  {text:"¿Qué tipo de acoso escolar se caracteriza por el uso de plataformas digitales para amenazar, difundir rumores o compartir imágenes sin consentimiento?",options:["Acoso físico, ya que afecta la integridad corporal del estudiante.", "Acoso socioemocional, porque daña las relaciones interpersonales.", "Ciberacoso, cuyo alcance es virtual y trasciende el espacio escolar."],correct:2,feedback:"El ciberacoso utiliza plataformas digitales para amenazar, difundir rumores, humillar o compartir imágenes sin consentimiento. Su característica principal es el alcance virtual, que extiende el daño más allá del entorno escolar.",tema:"Acoso Escolar"},
+  {text:"¿Cuál es el propósito principal del Protocolo de Erradicación del Acoso Escolar según el Acuerdo 14/12/23?",options:["Establecer acciones claras de prevención, atención y no repetición, sin limitarse a sancionar.", "Expulsar de forma definitiva a los estudiantes que cometan actos de violencia.", "Centralizar todas las decisiones disciplinarias en la supervisión de zona escolar."],correct:0,feedback:"El Protocolo busca ir más allá de la sanción: establece acciones de prevención, atención oportuna y medidas de no repetición, garantizando a niñas, niños y adolescentes el derecho a una educación libre de violencia.",tema:"Acoso Escolar"},
+  {text:"¿Quiénes son los espectadores pasivos en una situación de acoso escolar?",options:["Docentes que no se encuentran presentes en el momento del incidente.", "Educandos que no participan directamente, pero actúan de manera pasiva o incitadora.", "Padres de familia que no asisten a las reuniones convocadas por la escuela."],correct:1,feedback:"Los espectadores pasivos son los educandos que presencian el acoso sin participar directamente, pero cuyo silencio o indiferencia lo alimenta. Intervenirlos es clave para erradicar el fenómeno.",tema:"Acoso Escolar"},
+  {text:"¿Cuál de las siguientes situaciones es un ejemplo claro de acoso socioemocional?",options:["Golpear repetidamente a un compañero durante el recreo.", "Insultar a un alumno con sobrenombres ofensivos frente al grupo.", "Aislar, marginar e ignorar a un estudiante de manera sistemática y deliberada."],correct:2,feedback:"El acoso socioemocional se manifiesta en comportamientos que lesionan las relaciones interpersonales: aislar, marginar, ignorar o avergonzar en público. Su daño es relacional y afecta profundamente el bienestar emocional del estudiante.",tema:"Acoso Escolar"},
+  {text:"¿Qué fase del Protocolo corresponde a la 'observación activa y reconocimiento' de comportamientos de vulnerabilidad en víctimas, agresores y espectadores?",options:["Fase 2: Notificación a autoridades y familias.", "Fase 1: Detección a través de la observación activa.", "Fase 4: Seguimiento para la sanación continua."],correct:1,feedback:"La Fase 1 de Detección es el Radar del protocolo. Su objetivo es reconocer comportamientos de vulnerabilidad sin prejuzgar la veracidad de los hechos, usando guías de observación e indicadores de riesgo.",tema:"Acoso Escolar"},
+  {text:"¿Cuál es el principio rector que busca proteger la identidad y los datos personales de todos los involucrados en un caso de acoso escolar?",options:["Acción sin daño: intervenciones que sanen en lugar de castigar destructivamente.", "Perspectiva de género: eliminar causas de opresión y desigualdad.", "Confidencialidad: proteger la identidad y los datos de los involucrados."],correct:2,feedback:"La Confidencialidad es un principio rector que garantiza la protección de la identidad y los datos de todas las personas involucradas durante todo el proceso de atención al caso.",tema:"Acoso Escolar"},
+  {text:"Al confirmarse un caso de acoso escolar, ¿a quiénes debe informarse de manera inmediata en la Fase 2 del Protocolo?",options:["Únicamente al agresor y a su familia para responsabilizarlos del hecho.", "A los medios de comunicación locales para visibilizar la problemática.", "A las madres, padres o tutores de todos los involucrados, bajo estricta confidencialidad."],correct:2,feedback:"La acción inmediata de la Fase 2 es informar a las madres, padres o tutores de todos los involucrados —víctima y agresor—, garantizando la confidencialidad y la no revictimización en todo momento.",tema:"Acoso Escolar"},
+  {text:"¿Cuál es la meta final del Protocolo de Erradicación del Acoso Escolar, más allá de resolver el caso presente?",options:["Documentar estadísticamente los casos para elaborar informes anuales.", "Evitar que se repitan actos de acoso escolar en el futuro (no repetición).", "Transferir al agresor a otra institución educativa para proteger a la víctima."],correct:1,feedback:"El objetivo definitivo del Protocolo no es solo resolver el caso, sino garantizar la no repetición mediante acciones diseñadas a la medida del entorno escolar específico, sin estigmatizar a ninguna de las personas involucradas.",tema:"Acoso Escolar"},
+  {text:"¿Qué tipo de acoso escolar implica agresiones físicas repetidas como golpes, empujones, zancadillas, encierros o el robo de pertenencias personales?",options:["Acoso verbal, ya que busca humillar con palabras y acciones directas.", "Acoso físico, caracterizado por agresiones corporales y materiales directas.", "Acoso socioemocional, porque genera miedo y aislamiento en la víctima."],correct:1,feedback:"El acoso físico se caracteriza por agresiones repetidas y directas al cuerpo o pertenencias del estudiante: golpes, empujones, zancadillas, encierros, robo y destrucción de objetos personales.",tema:"Acoso Escolar"},
+  {text:"El acoso escolar generalmente ocurre en _______, lejos de la mirada de los adultos, lo que lo distingue de las riñas o conflictos ordinarios.",options:["…el salón de clases durante el desarrollo de las actividades académicas.", "…privado, en espacios sin supervisión adulta.", "…presencia de otros docentes que fungen como testigos del incidente."],correct:1,feedback:"Una nota diagnóstica clave del Protocolo señala que el acoso ocurre generalmente en privado, lejos de la mirada de los adultos, lo que dificulta su detección y justifica la importancia de la observación activa.",tema:"Acoso Escolar"},
+  {text:"En la Fase 3 de Intervención, la Ruta Administrativa incluye la firma de Cartas de compromisos donde el educando agresor y su familia se responsabilizan de…",options:["…cubrir una compensación económica a favor de la institución escolar.", "…cumplir los acuerdos establecidos para restaurar la convivencia.", "…solicitar el cambio de institución educativa en un plazo no mayor a 30 días."],correct:1,feedback:"Las Cartas de compromisos son instrumentos de la Ruta Administrativa donde el educando agresor y su familia se responsabilizan de cumplir los acuerdos pactados, garantizando la restauración del entorno escolar.",tema:"Acoso Escolar"},
+  {text:"La Ruta Formativa en la Fase de Intervención se enfoca en implementar prácticas restaurativas para subsanar los daños, en lugar de…",options:["…documentar minuciosamente el caso en las bitácoras escolares.", "…notificar de inmediato a las autoridades educativas de zona.", "…infligir castigos que no contribuyen a la restauración del vínculo."],correct:2,feedback:"La Ruta Formativa apuesta por prácticas restaurativas —sanar el daño y recomponer las relaciones— en lugar de aplicar castigos que, según el Protocolo, no contribuyen a la convivencia pacífica ni a la no repetición.",tema:"Acoso Escolar"},
+  {text:"El principio de 'Acción sin daño' establece que las intervenciones durante el proceso deben sanar, no…",options:["…documentar los hechos en el expediente del estudiante involucrado.", "…castigar destructivamente ni generar más daño del existente.", "…notificar inmediatamente a las familias de los involucrados."],correct:1,feedback:"El principio de Acción sin daño garantiza que todas las intervenciones institucionales busquen la sanación y restauración, evitando castigos destructivos que agraven la situación de cualquiera de las partes.",tema:"Acoso Escolar"},
+  {text:"En la Fase 4 de Seguimiento, el Paso 3 de Verificación consiste en confirmar que los acuerdos firmados en las cartas de compromiso se estén…",options:["…archivando de manera correcta en el expediente escolar.", "…comunicando públicamente a la comunidad educativa.", "…cumpliendo por parte del educando agresor y su familia."],correct:2,feedback:"La Verificación (Paso 3 del Seguimiento) garantiza que los compromisos adquiridos en la Fase de Intervención se estén cumpliendo de manera efectiva, como condición para el cierre del caso.",tema:"Acoso Escolar"},
+  {text:"¿Cuáles son los dos principios innegociables que rigen los cuatro momentos del protocolo de atención al acoso escolar?",options:["El interés superior de la niñez y el respeto a la dignidad y los derechos humanos.", "La participación del colegiado y la notificación obligatoria a autoridades externas.", "La documentación rigurosa de incidentes y la capacitación continua del personal."],correct:0,feedback:"El Eje Rector del protocolo establece que toda atención, en sus cuatro momentos (Detección, Notificación, Intervención y Seguimiento), está subordinada a estos dos principios innegociables que priorizan la protección integral del menor.",tema:"Red de Seguridad"},
+  {text:"¿Qué tipo de acoso escolar se caracteriza por la difusión de información o imágenes personales sin consentimiento, mensajes hirientes y robo de contraseñas?",options:["Acoso físico.", "Acoso socioemocional.", "Ciberacoso."],correct:2,feedback:"El ciberacoso se define por agresiones en entornos digitales: difusión sin consentimiento de información o imágenes personales, mensajes hirientes, publicaciones ofensivas y robo de contraseñas o creación de perfiles falsos.",tema:"Red de Seguridad"},
+  {text:"¿Qué figura educativa es el ejecutor central de los procedimientos de atención al acoso escolar y está encargada de implementar el sistema de seguimiento?",options:["El docente titular del grupo afectado.", "El colegiado.", "El director del plantel."],correct:1,feedback:"El Colegiado es el ejecutor central de los procedimientos de atención. Sin embargo, todas las figuras educativas deben participar ante la ausencia de la autoridad, garantizando la continuidad del protocolo.",tema:"Red de Seguridad"},
+  {text:"¿Cuál de los siguientes es un indicador general visible de que un alumno podría estar siendo víctima de acoso escolar?",options:["Alto rendimiento académico y mayor participación activa en actividades escolares.", "Cambios bruscos de estado de ánimo o tendencia a aislarse.", "Mayor interés por actividades físicas y deportivas dentro del plantel."],correct:1,feedback:"Los indicadores generales visibles incluyen cambios bruscos de estado de ánimo o tendencia a aislarse, descenso del rendimiento escolar, temor de ir al baño, cambios en hábitos alimentarios, entre otros síntomas observables.",tema:"Red de Seguridad"},
+  {text:"¿Qué acción corresponde exclusivamente al Director/Subdirector dentro del protocolo de atención inmediata, y que no está asignada al docente ni al personal administrativo?",options:["Detener la agresión de forma inmediata.", "Llamar a instancias correspondientes si corre peligro la vida.", "Conformar el colegiado y dar seguimiento a estudiantes y familias."],correct:2,feedback:"Las acciones de detener la agresión y llamar a emergencias son compartidas por las tres figuras. Solo el Director/Subdirector tiene la responsabilidad adicional y exclusiva de conformar el colegiado y dar seguimiento a estudiantes y familias.",tema:"Red de Seguridad"},
+  {text:"¿Qué debe hacer la familia cuando las autoridades del plantel no actúan ante una situación de acoso escolar reportada?",options:["Retirar al alumno de la institución de forma definitiva.", "Reportar la situación a otras instancias mediante el proceso de escalamiento.", "Resolver el conflicto directamente con la familia del estudiante agresor."],correct:1,feedback:"La Ruta de Notificación establece que ante la inacción de las autoridades del plantel, la familia tiene el derecho y la responsabilidad de escalar la situación reportándola a otras instancias superiores para garantizar la protección del alumno.",tema:"Red de Seguridad"},
+  {text:"¿Cuál de las siguientes conductas corresponde al acoso socioemocional según el protocolo de la Red de Seguridad Escolar?",options:["Golpes, empujones y obligar a pelear.", "Criticar, ignorar, discriminar y marginar de juegos o equipos de trabajo.", "Burlas, insultos y retos a pelear."],correct:1,feedback:"El acoso socioemocional lesiona la autoestima del alumno a través de conductas como criticar, ignorar, discriminar, marginar de juegos, fiestas o equipos de trabajo, y divulgar rumores. Se diferencia del acoso verbal en que busca la exclusión social.",tema:"Red de Seguridad"},
+  {text:"¿Cuál es el objetivo final del enfoque integral de La Red de Seguridad Escolar, según el protocolo?",options:["Sancionar al estudiante agresor con medidas disciplinarias ejemplares.", "Lograr la Convivencia Armónica Restaurada entre todas las partes.", "Documentar todos los incidentes para reportes estadísticos anuales."],correct:1,feedback:"El enfoque integral parte de la Detección Temprana, pasa por la Intervención y Documentación Compartida (Plantel + Familia), y su objetivo final es la Convivencia Armónica Restaurada, supervisada por el Colegiado.",tema:"Red de Seguridad"},
+  {text:"El protocolo establece que toda atención al acoso escolar, en sus cuatro momentos, está subordinada a dos principios innegociables: el interés superior de la niñez y…",options:["…la participación obligatoria de los padres de familia en todas las fases del proceso.", "…el respeto a la dignidad y los derechos humanos.", "…la intervención inmediata de las autoridades educativas regionales en cada caso."],correct:1,feedback:"El Eje Rector del protocolo define explícitamente que los dos principios innegociables son: el interés superior de la niñez y el respeto a la dignidad y los derechos humanos, los cuales guían cada decisión en los momentos de Detección, Notificación, Intervención y Seguimiento.",tema:"Red de Seguridad"},
+  {text:"En la Ruta de Notificación y Documentación, el plantel debe citar y notificar a las familias para explicar los hechos y acuerdos…",options:["…sin revelar la identidad del estudiante agresor para proteger su privacidad.", "…asegurando el respeto irrestricto a los derechos de ambas partes.", "…únicamente en presencia de autoridades educativas regionales externas."],correct:1,feedback:"El protocolo establece que al citar y notificar a las familias se deben explicar los hechos y acuerdos asegurando el respeto irrestricto a los derechos de ambas partes, garantizando la equidad en el proceso.",tema:"Red de Seguridad"},
+  {text:"Se ejemplifica una situación del entorno escolar que corresponde al tercer plano: Codiseño de contenidos, en la construcción del programa analítico, cuando en el Consejo Técnico Escolar…",options:["…presentan los resultados de las encuestas aplicadas a las familias de las alumnas y los alumnos con la finalidad de determinar y analizar las características sociográficas de la región.", "…deciden la manera en la que se abordarán las problemáticas detectadas en la comunidad escolar sobre el uso responsable del agua, con base en los campos formativos.", "…trabajan en la creación de estrategias por fases para incluir el aprendizaje de la lengua de señas mexicana para los grupos que cuentan con alumnas y alumnos con discapacidad auditiva."],correct:2,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Se identifica el primer plano de construcción del programa analítico: Contextualización curricular, cuando el colectivo docente…",options:["…analiza las condiciones socioeconómicas, culturales y lingüísticas de la comunidad para adaptar los contenidos del Plan de Estudios a su realidad local.", "…diseña secuencias didácticas innovadoras para trabajar los contenidos de manera interdisciplinaria.", "…elabora materiales educativos específicos para atender a estudiantes con necesidades educativas especiales."],correct:0,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Una situación que ejemplifica el segundo plano: Metodológico, en la construcción del programa analítico es cuando los docentes…",options:["…investigan las problemáticas ambientales de su región para integrarlas como ejes transversales.", "…definen las estrategias de enseñanza, los recursos didácticos y las formas de evaluación más pertinentes para abordar los contenidos con sus estudiantes.", "…consensan la distribución de contenidos por grado escolar considerando la progresión de aprendizajes."],correct:1,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Se refleja el trabajo del tercer plano: Codiseño de contenidos, cuando en la escuela…",options:["…los docentes revisan los libros de texto gratuitos para identificar qué contenidos son prioritarios según su contexto.", "…se organiza un proyecto comunitario donde estudiantes, docentes y familias co-crean contenidos sobre la historia local para integrarlos al currículo.", "…el director establece los criterios de evaluación que todos los docentes deben aplicar."],correct:1,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Una acción que corresponde al primer plano: Contextualización curricular, es cuando el Consejo Técnico Escolar…",options:["…realiza un diagnóstico de las lenguas indígenas presentes en la comunidad escolar para incorporarlas en el programa analítico.", "…define las técnicas de trabajo colaborativo que se implementarán durante el ciclo escolar.", "…elabora rúbricas de evaluación específicas para cada campo formativo."],correct:0,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Se ejemplifica el segundo plano: Metodológico, cuando los docentes de una escuela…",options:["…analizan los índices de marginación de la localidad para priorizar ciertos contenidos.", "…acuerdan implementar el aprendizaje basado en proyectos como estrategia principal para desarrollar los contenidos de todos los campos formativos.", "…diseñan nuevas unidades temáticas basadas en las festividades tradicionales de la región."],correct:1,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Una situación que refleja el tercer plano: Codiseño de contenidos, es cuando…",options:["…los estudiantes investigan problemáticas de su comunidad y, junto con sus docentes, crean materiales educativos que se integran al programa de estudios.", "…el colectivo docente revisa las estadísticas educativas de la zona para identificar áreas de oportunidad.", "…se establecen horarios flexibles para atender la diversidad de ritmos de aprendizaje."],correct:0,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Corresponde al primer plano: Contextualización curricular, cuando en el programa analítico…",options:["…se incluyen las actividades productivas de la región (agricultura, pesca, artesanías) como contextos para el aprendizaje de las matemáticas.", "…se definen los instrumentos de evaluación que se utilizarán durante el ciclo escolar.", "…se establecen acuerdos sobre cómo organizar el trabajo por proyectos integradores."],correct:0,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Se identifica el segundo plano: Metodológico, cuando el colectivo docente…",options:["…identifica que en la comunidad existe alta migración y decide incorporar esta realidad en los contenidos.", "…determina que utilizarán principalmente el trabajo cooperativo y la resolución de problemas como metodologías de enseñanza.", "…crea nuevos contenidos sobre tradiciones orales de la comunidad en coordinación con adultos mayores."],correct:1,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Una acción del tercer plano: Codiseño de contenidos, se observa cuando…",options:["…el supervisor escolar solicita reportes sobre el avance programático de cada grupo.", "…docentes, estudiantes y miembros de la comunidad colaboran en la elaboración de un herbario local que se integra como contenido del programa de ciencias naturales.", "…se revisan los resultados de las evaluaciones estandarizadas para ajustar las metas educativas."],correct:1,feedback:"Consulta el material sobre Programa Analítico.",tema:"Programa Analítico"},
+  {text:"Consiste en reconocer las condiciones socioeducativas de la escuela (lectura de la realidad) con objeto de identificar situaciones o problemas que sirvan como punto de partida para contextualizar y codiseñar contenidos.",options:["Análisis del contexto socioeducativo de la escuela", "Codiseño de contenidos", "Contextualización"],correct:0,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"El profesor Jesús, después de realizar el diagnóstico escolar, se encuentra revisando el programa sintético con la intención de identificar y elegir los contenidos que le ayudarán a la atención de las problemáticas detectadas ¿En qué momento del diseño del Programa Analítico se encuentra?",options:["Contextualización", "Codiseño", "Plano didáctico"],correct:0,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"De las siguientes afirmaciones sobre los contenidos del Programa Sintético ¿Cuál es correcta?",options:["Los contenidos se encuentran organizados por grados escolares y establecen lo que los estudiantes deben de aprender", "Se agrupan por nivel educativo en las disciplinas que conforman los Campos Formativos estableciendo los PDAs", "No son secuenciales ni obedecen a un criterio particular; es decir, ninguno es más importante que otro"],correct:2,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"Completa la frase correctamente: \"Los _________ integran los contenidos nacionales que se busca promover durante el trayecto por la educación básica de niñas, niños y adolescentes\"",options:["PDAs", "Campos formativos", "Ejes articuladores"],correct:1,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"El profesor Sergio, junto a sus estudiantes, se encuentra analizando la relación que existe entre el cambio climático y el aumento de las enfermedades transmitidas por mosquitos con la intención de establecer las formas en que se podrían atender las problemáticas ¿Qué campos formativos están abordando?I.- LenguajesII.- Saberes y pensamiento científicoIII.- Ética, naturaleza y sociedadesIV.- De lo humano y lo comunitario",options:["I y II", "II y III", "II y IV"],correct:1,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"¿Qué campo formativo promueve experiencias individuales y colectivas que favorecen la construcción de la identidad?",options:["Lenguajes", "Ética, naturaleza y sociedades", "De lo humano y lo comunitario"],correct:2,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"¿Qué Eje Articulador posibilita una práctica reflexiva orientada al cuestionamiento sobre las condiciones del mundo que nos rodea?",options:["Interculturalidad crítica", "Pensamiento crítico", "Inclusión"],correct:1,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"La maestra Olivia está abordando el contenido de \"alternativas ante conflictos y problemas de la vida en la comunidad\", para ello promueve que sus estudiantes propongan diversas formas en las que pueden comentar y resolver problemáticas que pueden acontecer tanto en el salón de clases como en la escuela ¿Qué eje articulador está abordando?",options:["Pensamiento crítico", "Interculturalidad crítica", "Igualdad de género"],correct:1,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"Este campo formativo favorece la indagación, exploración, conocimiento y comprensión de los fenómenos naturales y su relación con lo social, desde la perspectiva de diversos saberes",options:["Saberes y pensamiento científico", "Ética, naturaleza y sociedades", "De lo humano y lo comunitario"],correct:0,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"Con base en el diagnóstico escolar, la maestra Nicole realiza un listado de las problemáticas que acontecen en su salón de clases. Posteriormente, al momento de analizar el programa sintético, observa que debe de realizar ajustes a los contenidos para que atiendan de manera correcta a las necesidades de los estudiantes ¿En qué plano del Programa Analítico se encuentra desarrollando?",options:["Lectura de la realidad", "Contextualización", "Codiseño"],correct:2,feedback:"Consulta el material \"Aprendamos en Comunidad\" del Plan de Estudios 2022.",tema:"Aprendamos en Comunidad"},
+  {text:"¿Cuál es la perspectiva pedagógica correcta sobre los conflictos escolares según la guía de estudio?",options:["Son interrupciones negativas que deben eliminarse para mantener el orden en el aula.", "Son oportunidades educativas que preparan a los estudiantes para hacer valer sus derechos de manera no violenta.", "Son señales de que el docente no maneja bien su grupo y debe reforzar las normas de disciplina."],correct:1,feedback:"El conflicto escolar no es una interrupción sino una oportunidad educativa. Aprender a resolverlos prepara a los alumnos para la vida, enseñándoles a defender sus derechos de forma no violenta.",tema:"Conflictos Escolares"},
+  {text:"¿Cuál de los siguientes describe correctamente el estilo de afrontamiento 'Cooperación / Negociación' dentro de la Matriz de Diagnóstico?",options:["Renunciar a las propias necesidades y evitar el problema para preservar la armonía del grupo (Pierdo/Pierdes).", "Imponer los propios intereses sobre los demás sin considerar el valor de la relación (Gano/Pierdes).", "Ceder en lo flexible para proteger tanto el objetivo fundamental como la relación con el otro (Gano/Ganas)."],correct:2,feedback:"La Cooperación/Negociación se ubica en el cuadrante Gano/Ganas: ambas partes ceden en lo secundario para proteger lo fundamental y la relación. Exige asertividad y empatía simultáneamente.",tema:"Conflictos Escolares"},
+  {text:"¿Cuál es la diferencia principal entre la Negociación y la Mediación como estrategias de intervención en conflictos escolares?",options:["En la negociación interviene un tercero neutral que guía el proceso; en la mediación las partes lo resuelven solas.", "En la negociación las partes resuelven directamente con disposición al diálogo; en la mediación un facilitador neutro guía el proceso sin imponer soluciones.", "La mediación se aplica cuando aún existe disposición y capacidad para el diálogo directo entre las partes."],correct:1,feedback:"La Negociación ocurre cuando las partes aún pueden dialogar directamente. La Mediación requiere un facilitador neutral e imparcial cuando el diálogo directo se ha roto, aunque NUNCA impone la solución.",tema:"Conflictos Escolares"},
+  {text:"¿Qué técnica del Botiquín de Regulación Emocional consiste en cambiar pensamientos irracionales (como 'Me odia') por pensamientos racionales (como 'Tuvo un mal día')?",options:["Tiempo Fuera: distanciamiento temporal para calmar la emoción antes de dialogar.", "Distracción Conductual: enfocar la atención en una actividad con movimiento.", "Reestructuración Cognitiva: cambiar la interpretación irracional por una racional y objetiva."],correct:2,feedback:"La Reestructuración Cognitiva es la tercera herramienta del botiquín. Consiste en identificar pensamientos distorsionados sobre el conflicto y reemplazarlos por interpretaciones más realistas y menos hostiles.",tema:"Conflictos Escolares"},
+  {text:"¿Cuál es el rol correcto del mediador escolar durante un proceso de mediación entre estudiantes?",options:["Actuar como juez e imponer la solución más justa considerando la versión de ambas partes.", "Ser un facilitador neutral e imparcial que guía el proceso comunicativo, pero que NUNCA impone la solución.", "Ser el docente de mayor autoridad y experiencia que decide el resultado definitivo del conflicto."],correct:1,feedback:"El mediador es un facilitador neutral e imparcial. Su función es crear condiciones para que las partes lleguen a su propio acuerdo. Imponer una solución invalidaría el proceso de mediación.",tema:"Conflictos Escolares"},
+  {text:"Según la 'Radiografía de un Conflicto', ¿cuál combinación de señales indica que se está ante un conflicto real que requiere intervención docente?",options:["Únicamente cuando hay una confrontación física visible entre dos o más estudiantes dentro del salón de clases.", "Cuando las necesidades de dos partes se contraponen, existe tensión que distorsiona la percepción y hay emociones latentes como enojo, tristeza o frustración.", "Cuando el docente recibe una queja formal por escrito firmada por los alumnos involucrados en el problema."],correct:1,feedback:"Un conflicto puede identificarse antes de que escale físicamente. Las señales clave son: necesidades contrapuestas, tensión que distorsiona la percepción, incomodidad ante la conducta del otro y emociones latentes como enojo o resentimiento.",tema:"Conflictos Escolares"},
+  {text:"En el Ciclo de la Escucha Activa, ¿qué acción corresponde al Paso 2: Parafrasear?",options:["Hacer preguntas abiertas para clarificar la situación, como '¿Cómo te sientes ahora?'.", "Repetir con palabras propias lo que la otra persona dijo para confirmar que se entendió correctamente.", "Reconocer los sentimientos del otro, por ejemplo preguntando si se sintió avergonzado por lo que le dijeron."],correct:1,feedback:"Parafrasear es el acto de repetir el mensaje recibido con palabras propias para verificar la comprensión, usando frases como 'Si te entendí bien, lo que quieres decir es...'. Esto genera confianza y evita malentendidos.",tema:"Conflictos Escolares"},
+  {text:"¿Qué estilo de afrontamiento describe el cuadrante 'Evasión' en la Matriz de Diagnóstico?",options:["Gano/Ganas: ceder en lo flexible para proteger el objetivo fundamental y la relación.", "Pierdo/Pierdes: renunciar a las propias necesidades y evitar el problema por completo.", "Gano/Pierdes: imponer los intereses propios sin importar el daño a la relación con el otro."],correct:1,feedback:"La Evasión es el cuadrante Pierdo/Pierdes: la persona renuncia a sus necesidades y evita confrontar el conflicto. Esto no resuelve el problema subyacente y puede generar resentimiento acumulado.",tema:"Conflictos Escolares"},
+  {text:"¿Cuál de las siguientes acciones corresponde al componente 'Lenguaje Corporal Receptivo' dentro de La Postura de la Empatía?",options:["Establecer el propio punto de vista claramente antes de escuchar al otro para guiar la conversación.", "Interrumpir con preguntas frecuentes para demostrar que se está siguiendo el relato atentamente.", "Asentir con la cabeza e inclinar el cuerpo hacia la persona que habla para mostrar interés genuino."],correct:2,feedback:"El Lenguaje Corporal Receptivo incluye asentir con la cabeza y orientar el cuerpo hacia el interlocutor. Son señales no verbales que transmiten apertura, interés genuino y disposición para escuchar.",tema:"Conflictos Escolares"},
+  {text:"Según el Flujo de Resolución del Educador (El Acordeón), ¿cuál es la primera acción que debe realizar el docente cuando surge un conflicto?",options:["Aplicar inmediatamente la Negociación o la Mediación según la gravedad del conflicto observado.", "Identificar el estilo de afrontamiento de las partes: Competición, Evasión o Acomodación.", "Realizar de inmediato el Análisis 3P (Persona, Proceso, Problema) para conocer la raíz del conflicto."],correct:1,feedback:"La primera acción del acordeón es identificar el estilo de afrontamiento de las partes involucradas. Conocer si dominan la competición, evasión o acomodación permite elegir la estrategia de intervención adecuada.",tema:"Conflictos Escolares"}
+];
+
+// ── Estado ────────────────────────────────────────────────────────
+let currentQ = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let studentName = '';
+let timerInterval = null;
+let secondsLeft = 120 * 60;
+let examFinished = false;
+
+// ── Iniciar ───────────────────────────────────────────────────────
+function startExam() {
+  const nameInput = document.getElementById('studentName');
+  studentName = nameInput.value.trim();
+  if (!studentName) {
+    nameInput.style.border = '2px solid #e74c3c';
+    nameInput.placeholder = '⚠ Escribe tu nombre para continuar';
+    nameInput.focus();
+    return;
+  }
+  document.getElementById('screenWelcome').style.display = 'none';
+  document.getElementById('screenExam').style.display = 'flex';
+  renderQuestion(0);
+  startTimer();
+}
+
+// ── Timer ─────────────────────────────────────────────────────────
+function startTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    secondsLeft--;
+    updateTimerDisplay();
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval);
+      finishExam(true);
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(secondsLeft / 60);
+  const s = secondsLeft % 60;
+  const display = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  document.getElementById('timerDisplay').textContent = display;
+  const box = document.getElementById('timerBox');
+  box.className = 'timer-box';
+  if (secondsLeft <= 600) box.classList.add('danger');
+  else if (secondsLeft <= 1200) box.classList.add('warning');
+}
+
+// ── Renderizar pregunta ───────────────────────────────────────────
+function renderQuestion(idx) {
+  currentQ = idx;
+  const q = QUESTIONS[idx];
+  const total = QUESTIONS.length;
+  
+  // Meta
+  document.getElementById('qNumBadge').textContent = `Pregunta ${idx+1} de ${total}`;
+  document.getElementById('qTema').textContent = q.tema;
+  document.getElementById('qText').textContent = q.text;
+  
+  // Progress
+  const answered = answers.filter(a => a !== null).length;
+  const pct = (answered / total * 100).toFixed(1);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${answered} / ${total}`;
+  document.getElementById('answeredCount').textContent = `Respondidas: ${answered}`;
+  
+  // Options
+  const letters = ['A','B','C','D'];
+  const optList = document.getElementById('optionsList');
+  optList.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'opt';
+    div.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt}</div>`;
+    
+    // Restore state if already answered
+    if (answers[idx] !== null) {
+      div.classList.add('disabled');
+      if (i === q.correct) div.classList.add('correct');
+      if (i === answers[idx] && answers[idx] !== q.correct) div.classList.add('incorrect');
+    } else {
+      div.onclick = () => selectAnswer(idx, i);
+    }
+    optList.appendChild(div);
+  });
+  
+  // Feedback
+  const fb = document.getElementById('feedbackBox');
+  if (answers[idx] !== null) {
+    const isCorrect = answers[idx] === q.correct;
+    fb.className = 'feedback-box show ' + (isCorrect ? 'correct-fb' : 'incorrect-fb');
+    const icon = isCorrect ? '✅' : '❌';
+    fb.innerHTML = `<span class="feedback-icon">${icon}</span>${q.feedback}`;
+  } else {
+    fb.className = 'feedback-box';
+    fb.innerHTML = '';
+  }
+  
+  // Buttons
+  document.getElementById('btnPrev').disabled = idx === 0;
+  const isLast = idx === total - 1;
+  document.getElementById('btnNext').style.display = isLast ? 'none' : '';
+  document.getElementById('btnFinish').style.display = isLast ? '' : 'none';
+}
+
+// ── Seleccionar respuesta ─────────────────────────────────────────
+function selectAnswer(qIdx, optIdx) {
+  if (answers[qIdx] !== null || examFinished) return;
+  answers[qIdx] = optIdx;
+  renderQuestion(qIdx);
+}
+
+// ── Navegar ───────────────────────────────────────────────────────
+function navigate(dir) {
+  const next = currentQ + dir;
+  if (next >= 0 && next < QUESTIONS.length) renderQuestion(next);
+}
+
+// ── Confirmar finalizar ───────────────────────────────────────────
+function confirmFinish() {
+  const answered = answers.filter(a => a !== null).length;
+  const unanswered = QUESTIONS.length - answered;
+  if (unanswered > 0) {
+    const ok = confirm(`Aún tienes ${unanswered} pregunta(s) sin responder.\n¿Deseas finalizar el simulador de todas formas?`);
+    if (!ok) return;
+  }
+  finishExam(false);
+}
+
+// ── Finalizar examen ──────────────────────────────────────────────
+function finishExam(timeout) {
+  if (examFinished) return;
+  examFinished = true;
+  clearInterval(timerInterval);
+  
+  let correct = 0;
+  answers.forEach((ans, i) => {
+    if (ans === QUESTIONS[i].correct) correct++;
+  });
+  const incorrect = QUESTIONS.length - correct;
+  const pct = Math.round(correct / QUESTIONS.length * 100);
+  
+  // Update results
+  document.getElementById('resultsStudentName').textContent =
+    (timeout ? '⏰ Tiempo agotado — ' : '') + studentName;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statIncorrect').textContent = incorrect;
+  document.getElementById('statTotal').textContent = QUESTIONS.length;
+  document.getElementById('scorePct').textContent = pct + '%';
+  
+  // Circle
+  const deg = Math.round(pct / 100 * 360);
+  document.getElementById('scoreCircle').style.background =
+    `conic-gradient(#27ae60 ${deg}deg, #e0e8f5 ${deg}deg)`;
+  
+  // Message
+  let icon, msgClass, msg;
+  if (pct >= 90) {
+    icon='🏆'; msgClass='excelente';
+    msg=`¡Excelente, ${studentName}! Obtuviste ${correct} de ${QUESTIONS.length} respuestas correctas (${pct}%). Tu preparación para el proceso de admisión es sobresaliente. ¡Felicidades!`;
+  } else if (pct >= 70) {
+    icon='🎯'; msgClass='bien';
+    msg=`¡Buen trabajo, ${studentName}! Lograste ${correct} de ${QUESTIONS.length} correctas (${pct}%). Estás en buen camino. Repasa los temas con menor puntaje para mejorar aún más.`;
+  } else if (pct >= 50) {
+    icon='📚'; msgClass='regular';
+    msg=`Avanzas bien, ${studentName}. Obtuviste ${correct} de ${QUESTIONS.length} correctas (${pct}%). Te recomendamos reforzar los temas en los que tuviste más errores y continuar practicando.`;
+  } else {
+    icon='💪'; msgClass='insuf';
+    msg=`No te desanimes, ${studentName}. Obtuviste ${correct} de ${QUESTIONS.length} correctas (${pct}%). Dedica más tiempo al estudio de cada tema y vuelve a practicar con el simulador.`;
+  }
+  
+  document.getElementById('resultsIcon').textContent = icon;
+  const msgDiv = document.getElementById('resultMsg');
+  msgDiv.className = `result-msg ${msgClass}`;
+  msgDiv.textContent = msg;
+  
+  // Show results screen
+  document.getElementById('screenExam').style.display = 'none';
+  const sr = document.getElementById('screenResults');
+  sr.style.display = 'flex';
+}
+</script>
+</body>
+</html>

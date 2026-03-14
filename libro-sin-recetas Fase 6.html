@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un Libro Sin Recetas - SEP 2024-2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #FF6EC7 0%, #FF1493 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 2.8rem;
+            color: #FF1493;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 2.5rem;
+            color: #FF1493;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.8rem;
+            color: #FF6EC7;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .professor-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .professor-box h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin: 0;
+        }
+
+        .author-box {
+            background: linear-gradient(135deg, #FF6EC7 0%, #FF1493 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .author-box h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: #555;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 5px solid #FF1493;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #FF1493;
+            transition: transform 0.3s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+        }
+
+        .highlight {
+            background: #FFE4F0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #FF6EC7;
+            margin: 1.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        button {
+            background: #FF1493;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #C71585;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(199, 21, 133, 0.4);
+        }
+
+        .counter {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #FF1493;
+            z-index: 1000;
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .section-box h3 {
+            color: white;
+        }
+
+        .section-box p {
+            color: white;
+        }
+
+        .section-box ul {
+            color: white;
+        }
+
+        .section-box li {
+            color: white;
+        }
+
+        .critical-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .critical-box h3 {
+            color: white;
+        }
+
+        .critical-box p {
+            color: white;
+        }
+
+        .critical-box ul {
+            color: white;
+        }
+
+        .critical-box li {
+            color: white;
+        }
+
+        .nem-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .nem-box h3 {
+            color: white;
+        }
+
+        .nem-box p {
+            color: white;
+        }
+
+        .nem-box ul {
+            color: white;
+        }
+
+        .nem-box li {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .slide {
+                padding: 2rem;
+            }
+            
+            .controls {
+                bottom: 1rem;
+                right: 1rem;
+            }
+            
+            button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="counter" id="counter">1 / 13</div>
+
+    <div class="container">
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active" id="slide1">
+            <div class="professor-box">
+                <h3>👨‍🏫 Profesor: Francisco De Jesus Luna Benitez</h3>
+            </div>
+
+            <h1>📘 Un libro sin recetas, para la maestra y el maestro</h1>
+            <div class="subtitle">Fase 6. Modalidad Secundaria (SEP, 2024-2025)</div>
+            
+            <div class="author-box">
+                <div class="icon">📚</div>
+                <h3>Nueva Escuela Mexicana</h3>
+                <p style="color: white; margin-top: 1rem;">Análisis y reflexión sobre la práctica docente</p>
+            </div>
+
+            <div class="highlight" style="margin-top: 2rem;">
+                <p><strong>Un texto que reconoce al docente como profesional autónomo, capaz de reflexionar críticamente sobre su práctica y transformar la realidad educativa.</strong></p>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: NATURALEZA Y SENTIDO -->
+        <div class="slide" id="slide2">
+            <h2>1️⃣ Naturaleza y Sentido del Libro</h2>
+            
+            <div class="highlight">
+                <p>El texto <strong>no es un manual técnico ni un instructivo metodológico</strong>. Desde su título —"Un libro sin recetas"— deja claro que la enseñanza no puede reducirse a fórmulas universales.</p>
+            </div>
+
+            <div class="card">
+                <h3>Intención del Libro</h3>
+                <ul>
+                    <li>Reconocer al docente como <strong>profesional autónomo</strong></li>
+                    <li>Impulsar la <strong>reflexión crítica</strong> sobre la práctica</li>
+                    <li>Acompañar la implementación del <strong>Plan de Estudio 2022</strong></li>
+                    <li>Reposicionar la escuela como <strong>espacio de transformación social</strong></li>
+                </ul>
+            </div>
+
+            <div class="section-box">
+                <h3>Idea Central</h3>
+                <p>La práctica docente no debe ser mecánica ni administrativa, sino <strong>contextualizada, ética y situada</strong> en la realidad social de las y los estudiantes.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: DIMENSIÓN HISTÓRICA -->
+        <div class="slide" id="slide3">
+            <h2>2️⃣ Dimensión Histórica del Magisterio</h2>
+            
+            <div class="section-box">
+                <h3>Recorrido Histórico</h3>
+                <p>En la presentación e introducción se realiza un recorrido que:</p>
+                <ul>
+                    <li>Recupera la <strong>tradición crítica latinoamericana</strong> (influencia de Paulo Freire)</li>
+                    <li>Reconoce que el magisterio mexicano ha sido <strong>actor político</strong></li>
+                    <li>Nombra a docentes perseguidos o asesinados en el contexto de la represión política (años 60 y 70)</li>
+                    <li>Señala la "guerra sucia" y la violencia estatal contra movimientos sociales</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Función Formativa</h3>
+                <p>Recordar que <strong>enseñar no es neutral</strong>. La educación siempre está vinculada a proyectos de sociedad.</p>
+            </div>
+
+            <div class="card">
+                <p><strong>Mensaje implícito:</strong> El docente forma ciudadanos, no solo transmite contenidos.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: FUNDAMENTOS NEM - CAMPOS -->
+        <div class="slide" id="slide4">
+            <h2>3️⃣ Fundamentos de la NEM: Campos Formativos</h2>
+            
+            <div class="highlight">
+                <p>El libro explica la estructura curricular y su lógica. Los campos formativos <strong>no son materias aisladas</strong>, sino formas de organizar el conocimiento:</p>
+            </div>
+
+            <div class="grid">
+                <div class="box">
+                    <div class="icon">💬</div>
+                    <h3>Lenguajes</h3>
+                    <p>Comunicación, expresión y comprensión del mundo</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">🔬</div>
+                    <h3>Saberes y Pensamiento Científico</h3>
+                    <p>Análisis crítico y explicación racional</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">👥</div>
+                    <h3>De lo Humano y lo Comunitario</h3>
+                    <p>Identidad, cultura, relaciones sociales</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">🌍</div>
+                    <h3>Ética, Naturaleza y Sociedades</h3>
+                    <p>Responsabilidad social y ambiental</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: EJES ARTICULADORES -->
+        <div class="slide" id="slide5">
+            <h2>3️⃣ Fundamentos de la NEM: Ejes Articuladores</h2>
+            
+            <div class="nem-box">
+                <h3>Perspectivas Transversales</h3>
+                <p>Son perspectivas que deben atravesar toda la práctica educativa:</p>
+            </div>
+
+            <div class="grid">
+                <div class="box">
+                    <p>🌈 <strong>Inclusión</strong></p>
+                </div>
+                <div class="box">
+                    <p>🧠 <strong>Pensamiento crítico</strong></p>
+                </div>
+                <div class="box">
+                    <p>🌎 <strong>Interculturalidad crítica</strong></p>
+                </div>
+                <div class="box">
+                    <p>⚖️ <strong>Igualdad de género</strong></p>
+                </div>
+                <div class="box">
+                    <p>💪 <strong>Vida saludable</strong></p>
+                </div>
+                <div class="box">
+                    <p>📖 <strong>Apropiación cultural mediante lectura y escritura</strong></p>
+                </div>
+                <div class="box">
+                    <p>🎨 <strong>Artes y experiencias estéticas</strong></p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Importante:</strong> Estos no son "temas extra", sino principios que orientan la planeación.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: CRÍTICA MODELO NEOLIBERAL -->
+        <div class="slide" id="slide6">
+            <h2>4️⃣ Crítica al Modelo Educativo Neoliberal</h2>
+            
+            <div class="critical-box">
+                <h3>Análisis de la Reforma Anterior</h3>
+                <p>Se señala que la reforma educativa anterior:</p>
+                <ul>
+                    <li>Redujo la labor docente a <strong>cumplir indicadores</strong></li>
+                    <li>Privilegió <strong>evaluaciones estandarizadas</strong></li>
+                    <li>Introdujo una lógica <strong>administrativa y punitiva</strong></li>
+                    <li>Desplazó el <strong>sentido humanista</strong> de la educación</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>El Libro Propone Recuperar</h3>
+                <div class="grid">
+                    <div class="box">
+                        <p><strong>Autonomía pedagógica</strong></p>
+                    </div>
+                    <div class="box">
+                        <p><strong>Trabajo colaborativo</strong></p>
+                    </div>
+                    <div class="box">
+                        <p><strong>Dimensión social de la escuela</strong></p>
+                    </div>
+                    <div class="box">
+                        <p><strong>Confianza en el juicio profesional</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: PROGRAMA ANALÍTICO -->
+        <div class="slide" id="slide7">
+            <h2>5️⃣ El Programa Analítico</h2>
+            
+            <div class="highlight">
+                <p>Es uno de los elementos más importantes del libro.</p>
+                <p><strong>No es un formato burocrático</strong>, sino una herramienta para:</p>
+            </div>
+
+            <div class="grid">
+                <div class="box">
+                    <div class="icon">🔍</div>
+                    <h3>Analizar</h3>
+                    <p>El contexto escolar y comunitario</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">🎯</div>
+                    <h3>Detectar</h3>
+                    <p>Problemáticas reales</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">📋</div>
+                    <h3>Diseñar</h3>
+                    <p>Proyectos significativos</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">🔗</div>
+                    <h3>Integrar</h3>
+                    <p>Campos formativos y ejes articuladores</p>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <h3>El Programa Analítico Implica que el Docente</h3>
+                <ul>
+                    <li>Observe su realidad</li>
+                    <li>Dialogue con la comunidad</li>
+                    <li>Tome decisiones fundamentadas</li>
+                    <li>Construya propuestas pertinentes</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: PROYECTOS EDUCATIVOS -->
+        <div class="slide" id="slide8">
+            <h2>6️⃣ Proyectos Educativos y Vida Cotidiana</h2>
+            
+            <div class="nem-box">
+                <h3>El Aprendizaje Vinculado con la Vida Real</h3>
+                <p>El libro insiste en que el aprendizaje debe vincularse con la vida real.</p>
+            </div>
+
+            <div class="card">
+                <h3>Se Propone</h3>
+                <ul>
+                    <li>Partir de <strong>problemáticas del entorno</strong></li>
+                    <li>Diseñar <strong>proyectos interdisciplinarios</strong></li>
+                    <li>Involucrar a la <strong>comunidad</strong></li>
+                    <li>Construir <strong>aprendizajes con sentido social</strong></li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Principio Fundamental</h3>
+                <p>La vida cotidiana <strong>no es algo externo a la escuela</strong>, sino el punto de partida del conocimiento.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: EVALUACIÓN FORMATIVA -->
+        <div class="slide" id="slide9">
+            <h2>7️⃣ Evaluación Formativa</h2>
+            
+            <div class="section-box">
+                <h3>Transformar la Evaluación Tradicional</h3>
+                <p>Se propone un cambio radical en la forma de evaluar.</p>
+            </div>
+
+            <div class="grid">
+                <div class="box" style="border-top-color: #f5576c;">
+                    <h3>❌ En lugar de:</h3>
+                    <ul>
+                        <li>Exámenes punitivos</li>
+                        <li>Calificaciones como fin</li>
+                        <li>Evaluación para clasificar</li>
+                    </ul>
+                </div>
+                
+                <div class="box" style="border-top-color: #4facfe;">
+                    <h3>✅ Se plantea:</h3>
+                    <ul>
+                        <li>Retroalimentación continua</li>
+                        <li>Reflexión sobre el error</li>
+                        <li>Acompañamiento del proceso</li>
+                        <li>Participación activa del estudiante</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <p><strong>La evaluación se convierte en una herramienta para mejorar, no para sancionar.</strong></p>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: SALUD MENTAL DOCENTE -->
+        <div class="slide" id="slide10">
+            <h2>8️⃣ Salud Mental Docente</h2>
+            
+            <div class="critical-box">
+                <h3>Reconocimiento Innovador</h3>
+                <p>Un apartado relevante que reconoce:</p>
+                <ul>
+                    <li>Sobrecarga laboral</li>
+                    <li>Estrés</li>
+                    <li>Desgaste emocional</li>
+                    <li>Condiciones estructurales adversas</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <p>Se habla de <strong>resiliencia</strong>, pero también de la necesidad de <strong>condiciones dignas de trabajo</strong>.</p>
+            </div>
+
+            <div class="card">
+                <h3>Punto Innovador</h3>
+                <p>Este punto es innovador porque coloca al docente como <strong>sujeto de cuidado</strong>, no solo como ejecutor de políticas.</p>
+            </div>
+
+            <div class="section-box">
+                <div class="icon" style="color: white;">💚</div>
+                <h3>El Docente como Persona</h3>
+                <p>Se reconoce que el docente es un ser humano que necesita condiciones adecuadas para desarrollar su labor de manera efectiva y saludable.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: DIDÁCTICAS DECOLONIALES -->
+        <div class="slide" id="slide11">
+            <h2>9️⃣ Didácticas Decoloniales</h2>
+            
+            <div class="nem-box">
+                <h3>Cuestionar el Conocimiento Hegemónico</h3>
+                <p>El libro propone cuestionar:</p>
+                <ul>
+                    <li>Visiones <strong>eurocéntricas</strong> del conocimiento</li>
+                    <li>Imposición cultural</li>
+                    <li>Desvalorización de saberes locales</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Se Busca</h3>
+                <div class="grid">
+                    <div class="box">
+                        <div class="icon">🌱</div>
+                        <p><strong>Recuperar conocimientos comunitarios</strong></p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">🌈</div>
+                        <p><strong>Reconocer diversidad cultural</strong></p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">⚖️</div>
+                        <p><strong>Promover justicia cognitiva</strong></p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">💡</div>
+                        <p><strong>Generar pensamiento crítico</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Esto implica repensar qué se enseña y desde qué perspectiva.</strong></p>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: MENSAJE GLOBAL -->
+        <div class="slide" id="slide12">
+            <h2>🔟 Mensaje Global del Libro</h2>
+            
+            <div class="section-box">
+                <h3>La Educación Es:</h3>
+                <ul>
+                    <li><strong>Histórica</strong> - Tiene raíces y contexto</li>
+                    <li><strong>Social</strong> - Se desarrolla en comunidad</li>
+                    <li><strong>Política</strong> - Tiene implicaciones de poder</li>
+                    <li><strong>Ética</strong> - Requiere compromiso moral</li>
+                    <li><strong>Comunitaria</strong> - Vinculada al entorno</li>
+                </ul>
+            </div>
+
+            <div class="nem-box">
+                <h3>El Docente Es:</h3>
+                <ul>
+                    <li><strong>Profesional reflexivo</strong></li>
+                    <li><strong>Constructor de sentido</strong></li>
+                    <li><strong>Agente de transformación</strong></li>
+                    <li><strong>Mediador entre escuela y comunidad</strong></li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>Principio Fundamental</h3>
+                <p><strong>No se ofrecen recetas porque cada contexto exige decisiones propias.</strong></p>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: CONCLUSIÓN -->
+        <div class="slide" id="slide13">
+            <h2>Conclusión</h2>
+            
+            <div class="highlight">
+                <h3>Un Libro para la Autonomía Docente</h3>
+                <p>Este libro representa un cambio de paradigma en la forma de concebir la labor docente en México.</p>
+            </div>
+
+            <div class="grid">
+                <div class="box">
+                    <div class="icon">👨‍🏫</div>
+                    <h3>Docente Reflexivo</h3>
+                    <p>No ejecutor de instrucciones, sino profesional crítico</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">🏫</div>
+                    <h3>Escuela Transformadora</h3>
+                    <p>No reproductora, sino agente de cambio social</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">📚</div>
+                    <h3>Currículo Situado</h3>
+                    <p>No universal, sino contextualizado y pertinente</p>
+                </div>
+                
+                <div class="box">
+                    <div class="icon">🌟</div>
+                    <h3>Evaluación Formativa</h3>
+                    <p>No punitiva, sino herramienta de mejora</p>
+                </div>
+            </div>
+
+            <div class="author-box" style="margin-top: 2rem;">
+                <div class="icon">✨</div>
+                <h3>Nueva Escuela Mexicana</h3>
+                <p style="color: white; margin-top: 1rem;">"Un libro sin recetas, para la maestra y el maestro"</p>
+                <p style="color: white; font-size: 1rem; margin-top: 0.5rem;">SEP 2024-2025 - Fase 6</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevSlide()">← Anterior</button>
+        <button onclick="nextSlide()">Siguiente →</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 13;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.classList.remove('active'));
+
+            if (n > totalSlides) currentSlide = totalSlides;
+            else if (n < 1) currentSlide = 1;
+            else currentSlide = n;
+
+            document.getElementById('slide' + currentSlide).classList.add('active');
+            document.getElementById('counter').textContent = currentSlide + ' / ' + totalSlides;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        showSlide(1);
+    </script>
+</body>
+</html>
