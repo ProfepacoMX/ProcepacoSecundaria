@@ -7,32 +7,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* ═══════════════════════════════════════
-       VARIABLES & RESET
-    ═══════════════════════════════════════ */
     :root {
       --navy:      #0d1b2a;
       --navy-mid:  #1a2e45;
-      --navy-soft: #243752;
       --gold:      #c9973a;
       --gold-lt:   #e8b95a;
-      --gold-pale: #f5e0b0;
       --cream:     #f7f3ec;
       --white:     #ffffff;
       --text-dark: #0d1b2a;
       --text-mid:  #3a4a5c;
       --text-soft: #6b7f96;
-      --card-bg:   #ffffff;
-      --shadow-sm: 0 2px 12px rgba(13,27,42,.08);
-      --shadow-md: 0 8px 32px rgba(13,27,42,.14);
-      --shadow-lg: 0 20px 60px rgba(13,27,42,.20);
+      --shadow-md: 0 8px 32px rgba(13,27,42,.16);
+      --shadow-lg: 0 20px 60px rgba(13,27,42,.22);
       --radius:    16px;
-      --radius-sm: 10px;
-      --transition: .35s cubic-bezier(.4,0,.2,1);
+      --transition: .30s cubic-bezier(.4,0,.2,1);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -43,846 +34,639 @@
       overflow-x: hidden;
     }
 
-    /* ═══════════════════════════════════════
-       DECORATIVE BACKGROUND
-    ═══════════════════════════════════════ */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 10% -10%, rgba(201,151,58,.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 95% 110%, rgba(13,27,42,.08) 0%, transparent 55%);
+        radial-gradient(ellipse 80% 60% at 10% -10%, rgba(201,151,58,.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 95% 110%, rgba(13,27,42,.07) 0%, transparent 55%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* ═══════════════════════════════════════
-       HEADER
-    ═══════════════════════════════════════ */
+    /* ════════════ HEADER ════════════ */
     header {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1e3a5f 100%);
       color: var(--white);
-      padding: 0;
       position: relative;
       overflow: hidden;
     }
-
     header::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(
-          -45deg,
-          transparent,
-          transparent 40px,
-          rgba(201,151,58,.04) 40px,
-          rgba(201,151,58,.04) 80px
-        );
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(201,151,58,.04) 40px, rgba(201,151,58,.04) 80px);
     }
-
     header::after {
       content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 4px;
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
       background: linear-gradient(90deg, transparent, var(--gold), var(--gold-lt), var(--gold), transparent);
     }
-
     .header-inner {
       position: relative;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 52px 24px 48px;
+      max-width: 860px; margin: 0 auto;
+      padding: 46px 24px 42px;
       text-align: center;
     }
-
     .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      display: inline-flex; align-items: center; gap: 8px;
       background: rgba(201,151,58,.18);
       border: 1px solid rgba(201,151,58,.35);
       border-radius: 100px;
-      padding: 6px 18px;
-      font-size: .78rem;
-      font-weight: 600;
-      letter-spacing: .12em;
-      text-transform: uppercase;
+      padding: 5px 16px;
+      font-size: .74rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
       color: var(--gold-lt);
-      margin-bottom: 22px;
-      animation: fadeDown .6s ease both;
+      margin-bottom: 18px;
+      animation: fadeDown .55s ease both;
     }
-
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(1.9rem, 5vw, 3.2rem);
-      font-weight: 900;
-      line-height: 1.15;
-      color: var(--white);
-      animation: fadeDown .6s .1s ease both;
-      letter-spacing: -.01em;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900; line-height: 1.15;
+      color: var(--white); letter-spacing: -.01em;
+      animation: fadeDown .55s .08s ease both;
     }
-
-    h1 span {
-      color: var(--gold-lt);
-    }
-
-    .header-sub {
-      margin-top: 16px;
-      font-size: clamp(.95rem, 2.5vw, 1.12rem);
-      font-weight: 400;
-      color: rgba(255,255,255,.7);
-      animation: fadeDown .6s .2s ease both;
-    }
-
+    h1 span { color: var(--gold-lt); }
     .header-prof {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-      padding: 10px 22px;
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-top: 18px; padding: 9px 20px;
       background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: 100px;
-      font-size: .9rem;
-      font-weight: 500;
-      color: var(--white);
-      animation: fadeDown .6s .3s ease both;
+      font-size: .88rem; font-weight: 500; color: var(--white);
+      animation: fadeDown .55s .18s ease both;
     }
-
     .prof-avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
+      width: 30px; height: 30px; border-radius: 50%;
       background: linear-gradient(135deg, var(--gold), var(--gold-lt));
       display: flex; align-items: center; justify-content: center;
-      font-size: .95rem;
-      flex-shrink: 0;
+      font-size: .9rem; flex-shrink: 0;
     }
 
-    /* ═══════════════════════════════════════
-       MAIN LAYOUT
-    ═══════════════════════════════════════ */
-    main {
-      position: relative;
-      z-index: 1;
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 48px 20px 80px;
-    }
-
-    /* ═══════════════════════════════════════
-       SECTION TITLES
-    ═══════════════════════════════════════ */
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .section-label .icon-wrap {
-      width: 46px; height: 46px;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .section-label .icon-wrap.sim  { background: linear-gradient(135deg, #1a3a6e, #2a5298); }
-    .section-label .icon-wrap.gui  { background: linear-gradient(135deg, #1a5c3a, #2e8b57); }
-    .section-label .icon-wrap.pdf  { background: linear-gradient(135deg, #6e1a1a, #b22222); }
-
-    .section-label h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--navy);
-    }
-
-    .section-label .count-badge {
-      margin-left: auto;
+    /* ════════════ STICKY NAV ════════════ */
+    .nav-bar {
+      position: sticky; top: 0; z-index: 200;
       background: var(--navy);
-      color: var(--white);
-      font-size: .72rem;
-      font-weight: 600;
-      padding: 3px 11px;
-      border-radius: 100px;
-      letter-spacing: .06em;
+      box-shadow: 0 4px 24px rgba(13,27,42,.32);
+      border-bottom: 2px solid rgba(201,151,58,.28);
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: stretch;
+      padding: 0 16px; gap: 2px;
     }
 
-    /* ═══════════════════════════════════════
-       CATEGORY PANELS (accordion-style)
-    ═══════════════════════════════════════ */
-    .category-block {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 36px;
-      overflow: hidden;
-      border: 1px solid rgba(13,27,42,.06);
-      animation: riseUp .5s ease both;
+    /* ── Nav item wrapper ── */
+    .nav-item { position: relative; }
+
+    .nav-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 22px; height: 56px;
+      background: none; border: none;
+      color: rgba(255,255,255,.80);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+      letter-spacing: .01em;
+      border-bottom: 3px solid transparent;
+      transition: color var(--transition), background var(--transition), border-color var(--transition);
     }
-
-    .category-block:nth-child(2) { animation-delay: .1s; }
-    .category-block:nth-child(3) { animation-delay: .2s; }
-
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 20px 26px;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(13,27,42,.07);
-      user-select: none;
-      transition: background var(--transition);
+    .nav-btn .n-icon { font-size: 1.1rem; }
+    .nav-btn .n-arrow {
+      font-size: .58rem; opacity: .55; margin-left: 2px;
+      transition: transform var(--transition);
     }
-
-    .category-header:hover { background: rgba(13,27,42,.025); }
-
-    .cat-icon {
-      width: 48px; height: 48px;
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .cat-icon.sim { background: linear-gradient(135deg, #0d3b8c, #2563eb); box-shadow: 0 4px 16px rgba(37,99,235,.25); }
-    .cat-icon.gui { background: linear-gradient(135deg, #065f46, #10b981); box-shadow: 0 4px 16px rgba(16,185,129,.25); }
-    .cat-icon.pdf { background: linear-gradient(135deg, #7f1d1d, #ef4444); box-shadow: 0 4px 16px rgba(239,68,68,.25); }
-
-    .cat-title-group { flex: 1; }
-    .cat-title-group h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--navy);
-      line-height: 1.2;
-    }
-    .cat-title-group p {
-      font-size: .83rem;
-      color: var(--text-soft);
-      margin-top: 2px;
-      font-weight: 400;
-    }
-
-    .cat-arrow {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--cream);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .85rem;
-      transition: transform var(--transition), background var(--transition);
-      flex-shrink: 0;
-    }
-
-    .category-block.open .cat-arrow {
-      transform: rotate(180deg);
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    /* ═══════════════════════════════════════
-       CARD GRID
-    ═══════════════════════════════════════ */
-    .cards-panel {
-      display: none;
-      padding: 24px;
-    }
-
-    .category-block.open .cards-panel { display: block; }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    .resource-card {
-      background: var(--cream);
-      border: 1.5px solid rgba(13,27,42,.08);
-      border-radius: var(--radius-sm);
-      padding: 20px 16px 18px;
-      cursor: pointer;
-      text-align: center;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .resource-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.6));
-      opacity: 0;
-      transition: opacity var(--transition);
-    }
-
-    .resource-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-      border-color: transparent;
-    }
-
-    .resource-card:hover::before { opacity: 1; }
-
-    .resource-card.sim:hover { background: #eff6ff; border-color: #bfdbfe; }
-    .resource-card.gui:hover { background: #f0fdf4; border-color: #bbf7d0; }
-    .resource-card.pdf-card:hover { background: #fef2f2; border-color: #fecaca; }
-
-    .resource-card .card-emoji {
-      font-size: 2rem;
-      line-height: 1;
-      display: block;
-    }
-
-    .resource-card .card-name {
-      font-size: .85rem;
-      font-weight: 600;
-      color: var(--text-dark);
-      line-height: 1.3;
-      word-break: break-word;
-    }
-
-    .resource-card .card-tag {
-      font-size: .7rem;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 100px;
+    .nav-btn .n-count {
+      background: rgba(201,151,58,.28);
+      color: var(--gold-lt);
+      font-size: .64rem; font-weight: 700;
+      padding: 1px 7px; border-radius: 100px;
       letter-spacing: .04em;
     }
 
-    .resource-card.sim .card-tag  { background: #dbeafe; color: #1d4ed8; }
-    .resource-card.gui .card-tag  { background: #dcfce7; color: #15803d; }
-    .resource-card.pdf-card .card-tag { background: #fee2e2; color: #b91c1c; }
-
-    /* active card state */
-    .resource-card.active {
-      border-color: var(--gold) !important;
-      box-shadow: 0 0 0 3px rgba(201,151,58,.2), var(--shadow-md);
+    .nav-item:hover .nav-btn,
+    .nav-item.open   .nav-btn {
+      color: var(--white);
+      background: rgba(255,255,255,.06);
+      border-bottom-color: var(--gold);
     }
+    .nav-item.open .nav-btn .n-arrow,
+    .nav-item:focus-within .nav-btn .n-arrow { transform: rotate(180deg); }
 
-    /* ═══════════════════════════════════════
-       VIEWER
-    ═══════════════════════════════════════ */
-    #viewer-section {
+    /* ── Dropdown panel ── */
+    .nav-dropdown {
       display: none;
-      animation: riseUp .4s ease both;
+      position: absolute; top: calc(100% + 2px); left: 0;
+      min-width: 285px; max-width: 330px;
+      background: var(--white);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(13,27,42,.09);
+      border-top: 3px solid var(--gold);
+      overflow: hidden;
+      animation: dropDown .22s ease both;
+      max-height: 72vh; overflow-y: auto;
+    }
+    .nav-dropdown::-webkit-scrollbar { width: 5px; }
+    .nav-dropdown::-webkit-scrollbar-thumb { background: rgba(13,27,42,.14); border-radius: 10px; }
+
+    .nav-item.open .nav-dropdown { display: block; }
+
+    .dd-header {
+      padding: 11px 18px 8px;
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-soft);
+      border-bottom: 1px solid rgba(13,27,42,.07);
+    }
+    .dd-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 18px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .dd-item:hover   { background: var(--cream); border-left-color: var(--gold); }
+    .dd-item.active  { background: #fff8e7;       border-left-color: var(--gold); }
+    .dd-item .d-ico  { font-size: 1rem; flex-shrink: 0; }
+    .dd-item .d-txt  { flex: 1; font-size: .86rem; font-weight: 500; color: var(--text-dark); line-height: 1.25; }
+    .dd-item .d-star {
+      font-size: .62rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      color: var(--navy);
+      padding: 2px 7px; border-radius: 100px;
+      flex-shrink: 0; letter-spacing: .04em;
     }
 
+    /* ── Hamburger (mobile) ── */
+    .nav-hamburger {
+      display: none; align-items: center; gap: 8px;
+      padding: 0 14px; height: 56px;
+      background: none; border: none;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem; font-weight: 600;
+      cursor: pointer; margin-left: auto;
+    }
+    .ham-ico { font-size: 1.35rem; }
+
+    /* ── Mobile dropdown ── */
+    .mobile-menu {
+      display: none;
+      background: var(--navy-mid, #1a2e45);
+      border-top: 1px solid rgba(255,255,255,.07);
+      max-height: 70vh; overflow-y: auto;
+    }
+    .mobile-menu.open { display: block; }
+    .mob-section {
+      padding: 13px 20px 6px;
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold-lt);
+    }
+    .mob-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 20px 11px 26px;
+      cursor: pointer;
+      color: rgba(255,255,255,.76);
+      font-size: .88rem;
+      border-left: 3px solid transparent;
+      transition: background var(--transition), border-color var(--transition), color var(--transition);
+    }
+    .mob-item:hover, .mob-item.active {
+      background: rgba(255,255,255,.06);
+      border-left-color: var(--gold);
+      color: var(--white);
+    }
+    .mob-item .m-ico { font-size: .95rem; flex-shrink: 0; }
+
+    /* ════════════ MAIN ════════════ */
+    main {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* Welcome screen */
+    .welcome-screen {
+      text-align: center;
+      padding: 60px 20px;
+      animation: riseUp .5s ease both;
+    }
+    .welcome-ico {
+      font-size: 3.6rem; display: block;
+      margin-bottom: 20px;
+      animation: float 3.2s ease-in-out infinite;
+    }
+    .welcome-screen h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem; color: var(--navy); margin-bottom: 12px;
+    }
+    .welcome-screen p {
+      font-size: .95rem; color: var(--text-soft);
+      max-width: 420px; margin: 0 auto; line-height: 1.65;
+    }
+    .welcome-icons {
+      display: flex; justify-content: center; gap: 40px;
+      margin-top: 38px; flex-wrap: wrap;
+    }
+    .wi-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .wi-ico {
+      width: 54px; height: 54px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    }
+    .wi-ico.sim { background: linear-gradient(135deg,#0d3b8c,#2563eb); box-shadow: 0 6px 20px rgba(37,99,235,.25); }
+    .wi-ico.gui { background: linear-gradient(135deg,#065f46,#10b981); box-shadow: 0 6px 20px rgba(16,185,129,.25); }
+    .wi-ico.pdf { background: linear-gradient(135deg,#7f1d1d,#ef4444); box-shadow: 0 6px 20px rgba(239,68,68,.25); }
+    .wi-item span { font-size: .78rem; font-weight: 600; color: var(--text-mid); }
+
+    /* ════════════ VIEWER ════════════ */
+    #viewer-section { display: none; animation: riseUp .36s ease both; }
     #viewer-section.visible { display: block; }
 
     .viewer-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 18px;
       background: var(--navy);
       border-radius: var(--radius) var(--radius) 0 0;
       color: var(--white);
     }
-
-    .viewer-header .viewer-dots {
-      display: flex; gap: 6px;
-    }
-
-    .viewer-dot {
-      width: 11px; height: 11px;
-      border-radius: 50%;
-    }
-
+    .viewer-dots { display: flex; gap: 6px; }
+    .viewer-dot  { width: 11px; height: 11px; border-radius: 50%; }
     .viewer-dot:nth-child(1) { background: #ff5f57; }
     .viewer-dot:nth-child(2) { background: #ffbd2e; }
     .viewer-dot:nth-child(3) { background: #28c840; }
-
     .viewer-title {
-      flex: 1;
-      font-size: .88rem;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      opacity: .85;
+      flex: 1; font-size: .86rem; font-weight: 500;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .85;
     }
-
     .viewer-close {
-      background: rgba(255,255,255,.12);
-      border: none;
-      color: var(--white);
-      width: 30px; height: 30px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
+      background: rgba(255,255,255,.12); border: none; color: var(--white);
+      width: 30px; height: 30px; border-radius: 8px;
+      cursor: pointer; font-size: .95rem;
       display: flex; align-items: center; justify-content: center;
       transition: background var(--transition);
-      flex-shrink: 0;
     }
-
-    .viewer-close:hover { background: rgba(255,255,255,.25); }
-
+    .viewer-close:hover { background: rgba(255,255,255,.26); }
     .viewer-frame-wrap {
       background: var(--white);
-      border: 1px solid rgba(13,27,42,.1);
-      border-top: none;
+      border: 1px solid rgba(13,27,42,.1); border-top: none;
       border-radius: 0 0 var(--radius) var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
+      overflow: hidden; box-shadow: var(--shadow-lg);
     }
+    #content-frame { width: 100%; height: 78vh; border: none; display: block; }
 
-    #content-frame {
-      width: 100%;
-      height: 75vh;
-      border: none;
-      display: block;
-    }
-
-    /* ═══════════════════════════════════════
-       PDF MODAL
-    ═══════════════════════════════════════ */
+    /* ════════════ PDF MODAL ════════════ */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(13,27,42,.65);
-      backdrop-filter: blur(6px);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeIn .25s ease;
+      display: none; position: fixed; inset: 0;
+      background: rgba(13,27,42,.65); backdrop-filter: blur(6px);
+      z-index: 1000; align-items: center; justify-content: center; padding: 20px;
     }
-
-    .modal-overlay.open { display: flex; }
-
+    .modal-overlay.open { display: flex; animation: fadeIn .22s ease; }
     .modal-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 44px 40px 36px;
-      max-width: 440px;
-      width: 100%;
-      text-align: center;
-      box-shadow: var(--shadow-lg);
-      animation: popIn .3s cubic-bezier(.34,1.56,.64,1) both;
-      position: relative;
+      background: var(--white); border-radius: 20px;
+      padding: 44px 38px 34px; max-width: 420px; width: 100%;
+      text-align: center; box-shadow: var(--shadow-lg);
+      animation: popIn .28s cubic-bezier(.34,1.56,.64,1) both;
     }
-
-    .modal-icon-wrap {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7f1d1d, #ef4444);
+    .modal-ico-wrap {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: linear-gradient(135deg,#7f1d1d,#ef4444);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
-      margin: 0 auto 20px;
-      box-shadow: 0 8px 24px rgba(239,68,68,.3);
+      font-size: 1.9rem; margin: 0 auto 18px;
+      box-shadow: 0 8px 24px rgba(239,68,68,.28);
     }
-
     .modal-card h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 14px;
+      font-size: 1.35rem; font-weight: 700; color: var(--navy); margin-bottom: 12px;
     }
-
-    .modal-card p {
-      font-size: 1rem;
-      line-height: 1.65;
-      color: var(--text-mid);
+    .modal-card p { font-size: .96rem; line-height: 1.65; color: var(--text-mid); }
+    .highlight-text {
+      display: inline-block; margin-top: 14px;
+      background: linear-gradient(135deg,#0d1b2a,#1a3a6e);
+      color: var(--white); border-radius: 10px;
+      padding: 12px 22px; font-weight: 600; font-size: 1rem; line-height: 1.5;
     }
-
-    .modal-card .highlight-text {
-      display: inline-block;
-      margin-top: 14px;
-      background: linear-gradient(135deg, #0d1b2a, #1a3a6e);
-      color: var(--white);
-      border-radius: 10px;
-      padding: 12px 22px;
-      font-weight: 600;
-      font-size: 1.02rem;
-    }
-
     .modal-close-btn {
-      margin-top: 22px;
-      padding: 11px 28px;
-      background: var(--cream);
-      color: var(--text-mid);
-      border: 1.5px solid rgba(13,27,42,.12);
-      border-radius: 100px;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .88rem;
-      font-weight: 500;
-      transition: background var(--transition), border-color var(--transition);
+      margin-top: 20px; padding: 10px 28px;
+      background: var(--cream); color: var(--text-mid);
+      border: 1.5px solid rgba(13,27,42,.12); border-radius: 100px;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      font-size: .86rem; font-weight: 500;
+      transition: background var(--transition);
     }
+    .modal-close-btn:hover { background: #e8e3d8; }
 
-    .modal-close-btn:hover { background: #e8e3d8; border-color: rgba(13,27,42,.2); }
-
-    /* ═══════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════ */
+    /* ════════════ FOOTER ════════════ */
     footer {
-      background: var(--navy);
-      color: rgba(255,255,255,.5);
-      text-align: center;
-      padding: 22px 20px;
-      font-size: .8rem;
-      letter-spacing: .03em;
-      position: relative;
-      z-index: 1;
+      background: var(--navy); color: rgba(255,255,255,.44);
+      text-align: center; padding: 20px;
+      font-size: .78rem; letter-spacing: .03em;
+      position: relative; z-index: 1;
     }
-
     footer span { color: var(--gold-lt); font-weight: 600; }
 
-    /* ═══════════════════════════════════════
-       ANIMATIONS
-    ═══════════════════════════════════════ */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* ════════════ ANIMATIONS ════════════ */
+    @keyframes fadeDown  { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes riseUp    { from{opacity:0;transform:translateY(18px)}  to{opacity:1;transform:translateY(0)} }
+    @keyframes dropDown  { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn    { from{opacity:0}                              to{opacity:1} }
+    @keyframes popIn     { from{opacity:0;transform:scale(.87)}        to{opacity:1;transform:scale(1)} }
+    @keyframes float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 
-    @keyframes riseUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(.88); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    /* ═══════════════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════════════ */
-    @media (max-width: 640px) {
-      .header-inner { padding: 38px 18px 36px; }
-      main { padding: 28px 14px 60px; }
-      .category-header { padding: 16px 18px; }
-      .cards-panel { padding: 16px; }
-      .cards-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-      .modal-card { padding: 34px 24px 28px; }
-      #content-frame { height: 60vh; }
-    }
-
-    /* ═══════════════════════════════════════
-       FEATURED CARDS
-    ═══════════════════════════════════════ */
-    .resource-card.featured-card {
-      background: linear-gradient(145deg, #fff8e7, #fffdf5);
-      border: 2px solid var(--gold);
-      box-shadow: 0 4px 20px rgba(201,151,58,.20);
-      position: relative;
-    }
-
-    .resource-card.featured-card::after {
-      content: '⭐ DESTACADO';
-      position: absolute;
-      top: -1px; right: -1px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-      color: var(--navy);
-      font-size: .58rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      padding: 3px 9px;
-      border-radius: 0 var(--radius-sm) 0 8px;
-    }
-
-    .resource-card.featured-card .card-name {
-      color: #7a4f00;
-    }
-
-    .resource-card.featured-card .card-tag {
-      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-      color: var(--navy);
-      font-weight: 700;
-    }
-
-    .resource-card.featured-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 36px rgba(201,151,58,.35);
-      background: linear-gradient(145deg, #fff3d0, #fffaed);
+    /* ════════════ RESPONSIVE ════════════ */
+    @media (max-width: 700px) {
+      .header-inner { padding: 32px 16px 28px; }
+      main { padding: 22px 12px 60px; }
+      .nav-inner { padding: 0 8px; }
+      .nav-item { display: none; }
+      .nav-hamburger { display: flex; }
+      #content-frame { height: 62vh; }
+      .welcome-icons { gap: 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ══════════════ HEADER ══════════════ -->
-  <header>
-    <div class="header-inner">
-      <div class="header-badge">🎓 &nbsp;Recursos Académicos</div>
-      <h1>Plataforma de<br /><span>Recursos Educativos</span></h1>
-      <p class="header-sub">Simuladores, guías interactivas y documentos en un solo lugar</p>
-      <div class="header-prof">
-        <div class="prof-avatar">👨‍🏫</div>
-        Prof. Francisco De Jesus Luna Benitez
-      </div>
+<!-- ══════ HEADER ══════ -->
+<header>
+  <div class="header-inner">
+    <div class="header-badge">🎓 &nbsp;Recursos Académicos</div>
+    <h1>Plataforma de<br /><span>Recursos Educativos</span></h1>
+    <div class="header-prof">
+      <div class="prof-avatar">👨‍🏫</div>
+      Prof. Francisco De Jesus Luna Benitez
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- ══════════════ MAIN ══════════════ -->
-  <main>
+<!-- ══════ NAV ══════ -->
+<nav class="nav-bar" id="main-nav">
+  <div class="nav-inner">
 
-    <!-- ── VIEWER (hidden until a resource is selected) ── -->
-    <div id="viewer-section">
-      <div class="viewer-header">
-        <div class="viewer-dots">
-          <div class="viewer-dot"></div>
-          <div class="viewer-dot"></div>
-          <div class="viewer-dot"></div>
-        </div>
-        <div class="viewer-title" id="viewer-title">Recurso</div>
-        <button class="viewer-close" onclick="closeViewer()" title="Cerrar visor">✕</button>
-      </div>
-      <div class="viewer-frame-wrap">
-        <iframe id="content-frame" src="" title="Visor de contenido" allowfullscreen></iframe>
-      </div>
-    </div>
-    <!-- /viewer -->
-
-    <!-- ═══════════════════════════════════
-         SECCIÓN 1 — SIMULADORES
-    ═══════════════════════════════════ -->
-    <div class="category-block open" id="block-sim">
-      <div class="category-header" onclick="toggleBlock('block-sim')">
-        <div class="cat-icon sim">🔬</div>
-        <div class="cat-title-group">
-          <h2>Simuladores</h2>
-          <p>Experimenta y practica conceptos de forma interactiva</p>
-        </div>
-        <div class="cat-arrow">▼</div>
-      </div>
-      <div class="cards-panel">
-        <div class="cards-grid" id="sim-grid">
-          <!-- Las tarjetas se generan desde el arreglo de JS -->
-        </div>
+    <!-- Simuladores -->
+    <div class="nav-item" id="nav-sim">
+      <button class="nav-btn" onclick="toggleNav('nav-sim')">
+        <span class="n-icon">🔬</span>
+        Simuladores
+        <span class="n-count" id="cnt-sim"></span>
+        <span class="n-arrow">▼</span>
+      </button>
+      <div class="nav-dropdown" id="dd-sim">
+        <div class="dd-header">Simuladores interactivos</div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════
-         SECCIÓN 2 — GUÍAS INTERACTIVAS
-    ═══════════════════════════════════ -->
-    <div class="category-block open" id="block-gui">
-      <div class="category-header" onclick="toggleBlock('block-gui')">
-        <div class="cat-icon gui">📖</div>
-        <div class="cat-title-group">
-          <h2>Guías de Estudio Interactivas</h2>
-          <p>Material de apoyo con actividades y explicaciones guiadas</p>
-        </div>
-        <div class="cat-arrow">▼</div>
-      </div>
-      <div class="cards-panel">
-        <div class="cards-grid" id="gui-grid">
-          <!-- Las tarjetas se generan desde el arreglo de JS -->
-        </div>
+    <!-- Guías -->
+    <div class="nav-item" id="nav-gui">
+      <button class="nav-btn" onclick="toggleNav('nav-gui')">
+        <span class="n-icon">📖</span>
+        Guías de Estudio
+        <span class="n-count" id="cnt-gui"></span>
+        <span class="n-arrow">▼</span>
+      </button>
+      <div class="nav-dropdown" id="dd-gui">
+        <div class="dd-header">Guías interactivas</div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════
-         SECCIÓN 3 — PDF
-    ═══════════════════════════════════ -->
-    <div class="category-block open" id="block-pdf">
-      <div class="category-header" onclick="toggleBlock('block-pdf')">
-        <div class="cat-icon pdf">📄</div>
-        <div class="cat-title-group">
-          <h2>PDF</h2>
-          <p>Documentos para imprimir y repasar sin internet</p>
-        </div>
-        <div class="cat-arrow">▼</div>
-      </div>
-      <div class="cards-panel">
-        <div class="cards-grid">
-          <!-- Tarjeta única de PDF -->
-          <div class="resource-card pdf-card" onclick="openPdfModal()">
-            <span class="card-emoji">🖨️</span>
-            <span class="card-name">Documentos Versión Impresa</span>
-            <span class="card-tag">PDF</span>
-          </div>
-        </div>
-      </div>
+    <!-- PDF -->
+    <div class="nav-item" id="nav-pdf">
+      <button class="nav-btn" onclick="openPdfModal()">
+        <span class="n-icon">📄</span>
+        Documentos PDF
+      </button>
     </div>
 
-  </main>
+    <!-- Hamburger -->
+    <button class="nav-hamburger" onclick="toggleMobile()">
+      <span class="ham-ico" id="ham-ico">☰</span>
+      Menú
+    </button>
 
-  <!-- ══════════════ MODAL PDF ══════════════ -->
-  <div class="modal-overlay" id="pdf-modal" onclick="closePdfModal(event)">
-    <div class="modal-card">
-      <div class="modal-icon-wrap">📩</div>
-      <h3>Documentos Versión Impresa</h3>
-      <p>Para recibir los documentos en formato PDF listos para imprimir:</p>
-      <div class="highlight-text">
-        Proporciona al Profe Paco<br />un correo electrónico.
-      </div>
-      <br />
-      <button class="modal-close-btn" onclick="closePdfModal()">Entendido</button>
+  </div>
+  <div class="mobile-menu" id="mob-menu"></div>
+</nav>
+
+<!-- ══════ MAIN ══════ -->
+<main>
+
+  <!-- Welcome -->
+  <div class="welcome-screen" id="welcome-screen">
+    <span class="welcome-ico">📚</span>
+    <h2>Bienvenido a la Plataforma</h2>
+    <p>Selecciona una opción del menú superior para explorar los recursos educativos disponibles.</p>
+    <div class="welcome-icons">
+      <div class="wi-item"><div class="wi-ico sim">🔬</div><span>Simuladores</span></div>
+      <div class="wi-item"><div class="wi-ico gui">📖</div><span>Guías de Estudio</span></div>
+      <div class="wi-item"><div class="wi-ico pdf">📄</div><span>Documentos PDF</span></div>
     </div>
   </div>
 
-  <!-- ══════════════ FOOTER ══════════════ -->
-  <footer>
-    Plataforma de Recursos Educativos &nbsp;·&nbsp;
-    <span>Prof. Francisco De Jesus Luna Benitez</span>
-  </footer>
+  <!-- Viewer -->
+  <div id="viewer-section">
+    <div class="viewer-header">
+      <div class="viewer-dots">
+        <div class="viewer-dot"></div>
+        <div class="viewer-dot"></div>
+        <div class="viewer-dot"></div>
+      </div>
+      <div class="viewer-title" id="viewer-title">Recurso</div>
+      <button class="viewer-close" onclick="closeViewer()" title="Cerrar visor">✕</button>
+    </div>
+    <div class="viewer-frame-wrap">
+      <iframe id="content-frame" src="" title="Visor de contenido" allowfullscreen></iframe>
+    </div>
+  </div>
 
-  <!-- ══════════════════════════════════════
-       JAVASCRIPT
-  ══════════════════════════════════════ -->
-  <script>
-    /* ─────────────────────────────────────────
-       ★  AGREGA / EDITA TUS ARCHIVOS AQUÍ  ★
-       ─────────────────────────────────────────
-       Formato: { file: 'nombre-del-archivo.html', title: 'Título a mostrar' }
-       Si omites "title", se usará el nombre del archivo como título automáticamente.
-    ───────────────────────────────────────── */
+</main>
 
-    const SIMULADORES = [
-      { file: 'Simulador_Acoso_Escolar.html',                title: 'Acoso Escolar' },
-      { file: 'simulador_aprendamos_comunidad.html',         title: 'Aprendamos en Comunidad' },
-      { file: 'simulador_conflictos_escolares.html',         title: 'Conflictos Escolares' },
-      { file: 'simulador-General_1.html',                    title: 'Examen General',          featured: true },
-      { file: 'Simulador_LGDNNA.html',                       title: 'LGDNNA' },
-      { file: 'simulador_LGE.html',                          title: 'Ley General de Educación' },
-      { file: 'Simulador_Metodologias.html',                 title: 'Metodologías de Enseñanza' },
-      { file: 'simulador_NEM_2022.html',                     title: 'Nueva Escuela Mexicana 2022' },
-      { file: 'simulador_programa_analitico_30.html',        title: 'Programa Analítico' },
-      { file: 'simulador_red_seguridad.html',                title: 'Red de Tutoría y Seguridad' },
-      { file: 'simulador_red_seguridad_responsive.html',     title: 'Red de Tutoría (Versión Móvil)' },
-      { file: 'Simulador_Secundaria_General_2026.html',      title: 'Secundaria General 2026', featured: true },
-      { file: 'simulador-usicamm-responsive.html',           title: 'USICAMM' },
-      { file: 'simulador_vygotsky.html',                     title: 'Vygotsky y el Aprendizaje' },
-      { file: 'libro-sin-recetas_Fase_6.html',               title: 'Libro Sin Recetas — Fase 6' },
-    ];
+<!-- ══════ PDF MODAL ══════ -->
+<div class="modal-overlay" id="pdf-modal" onclick="closePdfModal(event)">
+  <div class="modal-card">
+    <div class="modal-ico-wrap">📩</div>
+    <h3>Documentos Versión Impresa</h3>
+    <p>Para recibir los documentos en formato PDF listos para imprimir:</p>
+    <div class="highlight-text">Proporciona al Profe Paco<br />un correo electrónico.</div>
+    <br />
+    <button class="modal-close-btn" onclick="closePdfModal()">Entendido</button>
+  </div>
+</div>
 
-    const GUIAS = [
-      { file: 'acuerdo-14-12-23-acoso-escolar.html',      title: 'Acuerdo 14/12/23 — Acoso Escolar' },
-      { file: 'articulo-4-cpeum-parrafos-8-9-10.html',    title: 'Artículo 4 CPEUM (Párrafos 8-10)' },
-      { file: 'CPEUM___Derechos_Fundamentales.html',      title: 'CPEUM — Derechos Fundamentales' },
-      { file: 'derechos-ninas-ninos.html',                title: 'Derechos de Niñas y Niños' },
-      { file: 'ecosistema_equidad_educativa.html',        title: 'Ecosistema de Equidad Educativa' },
-      { file: 'enfoque-formativo-evaluacion.html',        title: 'Enfoque Formativo de la Evaluación' },
-      { file: 'equidad-inclusion.html',                   title: 'Equidad e Inclusión' },
-      { file: 'guia_acoso_escolar.html',                  title: 'Guía — Acoso Escolar' },
-      { file: 'guia_CTE_lineamientos.html',               title: 'Guía CTE — Lineamientos' },
-      { file: 'guia_entornos_escolares_seguros.html',     title: 'Entornos Escolares Seguros' },
-      { file: 'guia_ley_general_educacion.html',          title: 'Guía — Ley General de Educación' },
-      { file: 'guia_lgdnna.html',                         title: 'Guía — LGDNNA' },
-      { file: 'guia_metodologias_sociocriticas.html',     title: 'Metodologías Sociocríticas' },
-      { file: 'guia_resolucion_conflictos.html',          title: 'Resolución de Conflictos' },
-      { file: 'lgdna-presentacion.html',                  title: 'LGDNA — Presentación' },
-      { file: 'normas-evaluacion.html',                   title: 'Normas de Evaluación' },
-      { file: 'nueva-escuela-mexicana.html',              title: 'Nueva Escuela Mexicana' },
-      { file: 'piaget_construyendo_la_mente.html',        title: 'Piaget — Construyendo la Mente' },
-      { file: 'programa-sintetico-analitico.html',        title: 'Programa Sintético y Analítico' },
-      { file: 'teorias-aprendizaje.html',                 title: 'Teorías del Aprendizaje' },
-      { file: 'vygotsky_guia_interactiva.html',             title: 'Vygotsky — Guía Interactiva' },
-    ];
+<!-- ══════ FOOTER ══════ -->
+<footer>
+  Plataforma de Recursos Educativos &nbsp;·&nbsp;
+  <span>Prof. Francisco De Jesus Luna Benitez</span>
+</footer>
 
-    /* ─── emojis rotativos ─── */
-    const SIM_EMOJIS = ['🛡️','🏫','🤝','📝','⚖️','📜','🎯','🏛️','📋','🔐','📱','🎓','🏅','🧠','📚'];
-    const GUI_EMOJIS = ['📋','📜','⚖️','👦','🌱','📊','🤝','🛡️','📌','🏫','📚','🧾','🔍','✌️','📣','📝','🏛️','🧠','📐','💡'];
+<script>
+  /* ══ DATOS ══ */
+  const SIMULADORES = [
+    { file: 'Simulador_Acoso_Escolar.html',                title: 'Acoso Escolar' },
+    { file: 'simulador_aprendamos_comunidad.html',         title: 'Aprendamos en Comunidad' },
+    { file: 'simulador_conflictos_escolares.html',         title: 'Conflictos Escolares' },
+    { file: 'simulador-General_1.html',                    title: 'Examen General',           featured: true },
+    { file: 'Simulador_LGDNNA.html',                       title: 'LGDNNA' },
+    { file: 'simulador_LGE.html',                          title: 'Ley General de Educación' },
+    { file: 'Simulador_Metodologias.html',                 title: 'Metodologías de Enseñanza' },
+    { file: 'simulador_NEM_2022.html',                     title: 'Nueva Escuela Mexicana 2022' },
+    { file: 'simulador_programa_analitico_30.html',        title: 'Programa Analítico' },
+    { file: 'simulador_red_seguridad.html',                title: 'Red de Tutoría y Seguridad' },
+    { file: 'simulador_red_seguridad_responsive.html',     title: 'Red de Tutoría (Versión Móvil)' },
+    { file: 'Simulador_Secundaria_General_2026.html',      title: 'Secundaria General 2026',  featured: true },
+    { file: 'simulador-usicamm-responsive.html',           title: 'USICAMM' },
+    { file: 'simulador_vygotsky.html',                     title: 'Vygotsky y el Aprendizaje' },
+    { file: 'libro-sin-recetas_Fase_6.html',               title: 'Libro Sin Recetas — Fase 6' },
+  ];
 
-    /* ─── Renderizar tarjetas ─── */
-    function buildCards(list, gridId, type) {
-      const emojis = type === 'sim' ? SIM_EMOJIS : GUI_EMOJIS;
-      const grid   = document.getElementById(gridId);
-      list.forEach((item, i) => {
-        const title = item.title || fileToTitle(item.file);
-        const tag   = type === 'sim' ? 'Simulador' : 'Guía';
-        const emoji = emojis[i % emojis.length];
-        const card  = document.createElement('div');
-        card.className = `resource-card ${type}${item.featured ? ' featured-card' : ''}`;
-        card.dataset.file  = item.file;
-        card.dataset.title = title;
-        card.innerHTML = `
-          <span class="card-emoji">${emoji}</span>
-          <span class="card-name">${title}</span>
-          <span class="card-tag">${tag}</span>
-        `;
-        card.addEventListener('click', () => openResource(item.file, title, card));
-        grid.appendChild(card);
+  const GUIAS = [
+    { file: 'acuerdo-14-12-23-acoso-escolar.html',      title: 'Acuerdo 14/12/23 — Acoso Escolar' },
+    { file: 'articulo-4-cpeum-parrafos-8-9-10.html',    title: 'Artículo 4 CPEUM (Párrafos 8-10)' },
+    { file: 'CPEUM___Derechos_Fundamentales.html',      title: 'CPEUM — Derechos Fundamentales' },
+    { file: 'derechos-ninas-ninos.html',                title: 'Derechos de Niñas y Niños' },
+    { file: 'ecosistema_equidad_educativa.html',        title: 'Ecosistema de Equidad Educativa' },
+    { file: 'enfoque-formativo-evaluacion.html',        title: 'Enfoque Formativo de la Evaluación' },
+    { file: 'equidad-inclusion.html',                   title: 'Equidad e Inclusión' },
+    { file: 'guia_acoso_escolar.html',                  title: 'Guía — Acoso Escolar' },
+    { file: 'guia_CTE_lineamientos.html',               title: 'Guía CTE — Lineamientos' },
+    { file: 'guia_entornos_escolares_seguros.html',     title: 'Entornos Escolares Seguros' },
+    { file: 'guia_ley_general_educacion.html',          title: 'Guía — Ley General de Educación' },
+    { file: 'guia_lgdnna.html',                         title: 'Guía — LGDNNA' },
+    { file: 'guia_metodologias_sociocriticas.html',     title: 'Metodologías Sociocríticas' },
+    { file: 'guia_resolucion_conflictos.html',          title: 'Resolución de Conflictos' },
+    { file: 'lgdna-presentacion.html',                  title: 'LGDNA — Presentación' },
+    { file: 'normas-evaluacion.html',                   title: 'Normas de Evaluación' },
+    { file: 'nueva-escuela-mexicana.html',              title: 'Nueva Escuela Mexicana' },
+    { file: 'piaget_construyendo_la_mente.html',        title: 'Piaget — Construyendo la Mente' },
+    { file: 'programa-sintetico-analitico.html',        title: 'Programa Sintético y Analítico' },
+    { file: 'teorias-aprendizaje.html',                 title: 'Teorías del Aprendizaje' },
+    { file: 'vygotsky_guia_interactiva.html',           title: 'Vygotsky — Guía Interactiva' },
+  ];
+
+  const SIM_EMOJIS = ['🛡️','🏫','🤝','📝','⚖️','📜','🎯','🏛️','📋','🔐','📱','🎓','🏅','🧠','📚'];
+  const GUI_EMOJIS = ['📋','📜','⚖️','👦','🌱','📊','🤝','🛡️','📌','🏫','📚','🧾','🔍','✌️','📣','📝','🏛️','🧠','📐','💡','🔬'];
+
+  /* ══ Build dropdown items ══ */
+  function buildDropdown(list, ddId, emojis) {
+    const container = document.getElementById(ddId);
+    list.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'dd-item';
+      el.innerHTML = `
+        <span class="d-ico">${emojis[i % emojis.length]}</span>
+        <span class="d-txt">${item.title}</span>
+        ${item.featured ? '<span class="d-star">⭐ Destacado</span>' : ''}
+      `;
+      el.addEventListener('click', () => {
+        openResource(item.file, item.title, el);
+        closeAllDropdowns();
       });
-    }
-
-    /* Convierte 'mi-archivo.html' → 'Mi Archivo' */
-    function fileToTitle(file) {
-      return file
-        .replace(/\.html$/i, '')
-        .replace(/[-_]/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    buildCards(SIMULADORES, 'sim-grid', 'sim');
-    buildCards(GUIAS,       'gui-grid', 'gui');
-
-    /* ─── Visor central ─── */
-    let activeCard = null;
-
-    function openResource(file, title, cardEl) {
-      // Limpiar selección previa
-      if (activeCard) activeCard.classList.remove('active');
-      activeCard = cardEl;
-      cardEl.classList.add('active');
-
-      const section = document.getElementById('viewer-section');
-      const frame   = document.getElementById('content-frame');
-      const titleEl = document.getElementById('viewer-title');
-
-      titleEl.textContent = title;
-      frame.src = file;
-
-      section.classList.add('visible');
-
-      // Scroll suave al visor
-      setTimeout(() => {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 80);
-    }
-
-    function closeViewer() {
-      const section = document.getElementById('viewer-section');
-      const frame   = document.getElementById('content-frame');
-      section.classList.remove('visible');
-      frame.src = '';
-      if (activeCard) {
-        activeCard.classList.remove('active');
-        activeCard = null;
-      }
-    }
-
-    /* ─── Accordion bloques ─── */
-    function toggleBlock(id) {
-      const el = document.getElementById(id);
-      el.classList.toggle('open');
-    }
-
-    /* ─── Modal PDF ─── */
-    function openPdfModal() {
-      document.getElementById('pdf-modal').classList.add('open');
-    }
-
-    function closePdfModal(e) {
-      if (!e || e.target === document.getElementById('pdf-modal')) {
-        document.getElementById('pdf-modal').classList.remove('open');
-      }
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        closePdfModal();
-        closeViewer();
-      }
+      container.appendChild(el);
     });
-  </script>
+  }
+
+  /* ══ Build mobile menu ══ */
+  function buildMobile() {
+    const mob = document.getElementById('mob-menu');
+    [
+      { label: '🔬 Simuladores',     list: SIMULADORES, emojis: SIM_EMOJIS },
+      { label: '📖 Guías de Estudio', list: GUIAS,       emojis: GUI_EMOJIS },
+    ].forEach(sec => {
+      const title = document.createElement('div');
+      title.className = 'mob-section';
+      title.textContent = sec.label;
+      mob.appendChild(title);
+      sec.list.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'mob-item';
+        el.innerHTML = `<span class="m-ico">${sec.emojis[i % sec.emojis.length]}</span>${item.title}${item.featured ? ' ⭐' : ''}`;
+        el.addEventListener('click', () => { openResource(item.file, item.title, el); closeMobile(); });
+        mob.appendChild(el);
+      });
+    });
+    // PDF entry
+    const pt = document.createElement('div');
+    pt.className = 'mob-section'; pt.textContent = '📄 Documentos PDF';
+    mob.appendChild(pt);
+    const pi = document.createElement('div');
+    pi.className = 'mob-item';
+    pi.innerHTML = '<span class="m-ico">🖨️</span>Documentos Versión Impresa';
+    pi.addEventListener('click', () => { openPdfModal(); closeMobile(); });
+    mob.appendChild(pi);
+  }
+
+  /* ══ Counters ══ */
+  document.getElementById('cnt-sim').textContent = SIMULADORES.length;
+  document.getElementById('cnt-gui').textContent = GUIAS.length;
+
+  buildDropdown(SIMULADORES, 'dd-sim', SIM_EMOJIS);
+  buildDropdown(GUIAS,       'dd-gui', GUI_EMOJIS);
+  buildMobile();
+
+  /* ══ Dropdown logic ══ */
+  function closeAllDropdowns() {
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('open'));
+  }
+  function toggleNav(id) {
+    const item  = document.getElementById(id);
+    const isOpen = item.classList.contains('open');
+    closeAllDropdowns();
+    if (!isOpen) item.classList.add('open');
+  }
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-item')) closeAllDropdowns();
+  });
+
+  /* ══ Mobile ══ */
+  let mobOpen = false;
+  function toggleMobile() {
+    mobOpen = !mobOpen;
+    document.getElementById('mob-menu').classList.toggle('open', mobOpen);
+    document.getElementById('ham-ico').textContent = mobOpen ? '✕' : '☰';
+  }
+  function closeMobile() {
+    mobOpen = false;
+    document.getElementById('mob-menu').classList.remove('open');
+    document.getElementById('ham-ico').textContent = '☰';
+  }
+
+  /* ══ Viewer ══ */
+  let activeEl = null;
+  function openResource(file, title, el) {
+    if (activeEl) activeEl.classList.remove('active');
+    activeEl = el; el.classList.add('active');
+
+    document.getElementById('welcome-screen').style.display = 'none';
+    const vs = document.getElementById('viewer-section');
+    document.getElementById('viewer-title').textContent = title;
+    document.getElementById('content-frame').src = file;
+    vs.style.display = 'block';
+    vs.classList.add('visible');
+    setTimeout(() => vs.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  }
+  function closeViewer() {
+    const vs = document.getElementById('viewer-section');
+    vs.style.display = 'none'; vs.classList.remove('visible');
+    document.getElementById('content-frame').src = '';
+    document.getElementById('welcome-screen').style.display = 'block';
+    if (activeEl) { activeEl.classList.remove('active'); activeEl = null; }
+  }
+
+  /* ══ PDF Modal ══ */
+  function openPdfModal() {
+    closeAllDropdowns();
+    document.getElementById('pdf-modal').classList.add('open');
+  }
+  function closePdfModal(e) {
+    if (!e || e.target === document.getElementById('pdf-modal'))
+      document.getElementById('pdf-modal').classList.remove('open');
+  }
+
+  /* ══ Keyboard ══ */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeAllDropdowns(); closePdfModal(); closeViewer(); }
+  });
+</script>
 </body>
 </html>
